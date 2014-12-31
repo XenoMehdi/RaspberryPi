@@ -37,7 +37,7 @@ char key;
 int  ip_hundler;
 struct ifreq ifr;
 char *ip_address;
- 
+
 void get_ip_address(char **ip);
 
 int main(){
@@ -48,7 +48,7 @@ get_ip_address(&ip_address);
 
 // Setup the wiringPi library
 wiringPiSetup();
-// Set LED and LCDÃ_Aas outputs
+// Set LED and LCDÃƒ_Aas outputs
 pinMode(LED, OUTPUT);
 pinMode(LCD_A, OUTPUT);
 // Trigger GPIO.10 ON
