@@ -1,4 +1,4 @@
-#include "lcd.h"
+#include "lcd_public.h"
 
 int  lcd_hundler;
 
