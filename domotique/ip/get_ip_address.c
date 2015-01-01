@@ -1,5 +1,8 @@
 #include "ip.h"
 
+int  ip_hundler;
+struct ifreq ifr;
+
 void get_ip_address(char **ip){
 
  ip_hundler = socket(AF_INET, SOCK_DGRAM, 0);
