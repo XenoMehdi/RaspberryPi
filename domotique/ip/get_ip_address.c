@@ -1,4 +1,4 @@
-#include "ip.h"
+#include "ip_public.h"
 
 int  ip_hundler;
 struct ifreq ifr;
