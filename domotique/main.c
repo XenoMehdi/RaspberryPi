@@ -1,11 +1,7 @@
-#include <stdio.h>
+#include <stdlib.h>
 
 #include "lcd_public.h"
 #include "ip_public.h"
-
-#define TRUE  ( 1 == 1 )
-#define FALSE ( 1 == 0 )
-
 
 char *ip_address;
 

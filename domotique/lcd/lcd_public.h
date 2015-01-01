@@ -6,6 +6,9 @@
 #define RS 3
 #define EN 2
 
+#define TRUE  (1==1)
+#define FALSE (1==0)
+
 #define D4 0
 #define D5 7
 #define D6 9
