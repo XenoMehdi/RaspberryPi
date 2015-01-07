@@ -50,6 +50,19 @@ typedef enum output_element_e{
   nb_Of_Output_Elements
 } output_element_t ;
 
+// define an lcd message structure
+typedef struct lcd_message_s{
+  char lcd_line_1 [16] ;
+  char lcd_line_2 [16] ;
+} lcd_message_t ;
+
+// define a monitoring message structure
+typedef struct monitor_message_s{
+  
+}
+/* define a structure of message that contains a field for lcd_message      */
+/* and a field for monitoring_message with the same meaning but with        */
+/* different density, monitoring_message is more detailled than lcd_message */
 /**********************/
 /* Public Data        */
 /**********************/
