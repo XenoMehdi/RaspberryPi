@@ -6,9 +6,9 @@
 * PROJECT : Intelligent Home (Raspberry Pi B+)                                 *
 ********************************************************************************
 *                                                                              *
-*  Module Name : ihome_initialize                                              *
+*  Module Name : template_header                                               *
 *                                                                              *
-*  Description : initialize all software's data.                               *
+*  Description : header for all software's modules.                            *
 *                                                                              *
 *  Written by  : E. EL FAKIR                                 Date : 07/01/2015 *
 *                                                                              *
