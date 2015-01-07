@@ -58,11 +58,31 @@ typedef struct lcd_message_s{
 
 // define a monitoring message structure
 typedef struct monitor_message_s{
-  
-}
+  char message [255] ;
+} monitor_message_t ;
+
 /* define a structure of message that contains a field for lcd_message      */
 /* and a field for monitoring_message with the same meaning but with        */
 /* different density, monitoring_message is more detailled than lcd_message */
+typedef struct messages_list_s{
+  unsigned int      id_message ;
+  lcd_message_t     lcd_message ;
+  monitor_message_t monitor_message ;
+} messages_list_t ;
+
+typedef enum messages_elements_e{
+  MESSAGE_1,
+  MESSAGE_1,
+  MESSAGE_1,
+  MESSAGE_1,
+  MESSAGE_1,
+  MESSAGE_1,
+  MESSAGE_1,
+  MESSAGE_1,
+  MESSAGE_1,
+  MESSAGE_1,
+  nb_Of_Messages
+}
 /**********************/
 /* Public Data        */
 /**********************/
@@ -73,6 +93,9 @@ extern const input_object_t input_object_cst;
 // Array of output elements.
 extern output_object_t outputs_Array_Of_Elements [ nb_Of_Output_Elements ];
 extern const output_object_t output_object_cst;
+
+// List of defined messages 
+extern const messages_list_t messages_list [ nb_Of_Messages ] ;
 
 /**********************/
 /* Public Functions   */
