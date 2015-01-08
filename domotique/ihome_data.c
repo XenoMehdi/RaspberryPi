@@ -58,5 +58,11 @@ const messages_object_t messages_list_cst [ nb_Of_Messages ] = {
 active_message_t active_message_list [ nb_OF_ACTIVE_MESSAGES] ;
 const active_message_t active_message_init_cst = {NO_ACTIVE_MESSAGE, FALSE, FALSE} ;
 
+// active software configuration
+sw_configuration_t software_configuration ;
+
+// default software configuration
+const sw_configuration_t software_configuration_default = 3 ; // set lcd and backlight on
+
 // LCD driver handler
 int  lcd_handler ;
