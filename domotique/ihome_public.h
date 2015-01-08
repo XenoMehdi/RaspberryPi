@@ -1,18 +1,39 @@
-/*******************************************************************************
-* Copyright FEZ EMBEDDED SYSTEMS INDUSTRY (c) 2015       All Rights Reserved   *
-********************************************************************************/
+/**
+ *	API for iHome Software.
+ *
+ *  @Module   ihome_public
+ *	@author 	El Mehdi El Fakir
+ *	@email		elmehdi@elfakir.me
+ *	@website	--
+ *	@link		  --
+ *	@version 	v1.0
+ *	@compiler GCC
+ *  @hardware Raspberry Pi B+
+ *	@license	GNU GPL v3
+ *	
+ * |----------------------------------------------------------------------
+ * | Copyright (C) FEZ EMBEDDED SYSTEMS INDUSTRY, 2015
+ * | 
+ * | This program is free software: you can redistribute it and/or modify
+ * | it under the terms of the GNU General Public License as published by
+ * | the Free Software Foundation, either version 3 of the License, or
+ * | any later version.
+ * |  
+ * | This program is distributed in the hope that it will be useful,
+ * | but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * | GNU General Public License for more details.
+ * | 
+ * | You should have received a copy of the GNU General Public License
+ * | along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * |----------------------------------------------------------------------
+ *	
+ *	Version 1.0
+ *	 - January 08, 2015
+ *	 - first issue
+ *	
+ */
 
-/*******************************************************************************
-* PROJECT : Intelligent Home (Raspberry Pi B+)                                 *
-********************************************************************************
-*                                                                              *
-*  Module Name : ihome_public                                                  *
-*                                                                              *
-*  Description : API for iHome Software.                                       *
-*                                                                              *
-*  Written by  : E. EL FAKIR                                 Date : 07/01/2015 *
-*                                                                              *
-********************************************************************************
 #include <pthread.h>
 
 /**********************/
@@ -24,26 +45,39 @@ typedef unsigned char boolean_t;
 #define FALSE ( 1 == 0 )
 #define nb_OF_ACTIVE_MESSAGES 5
 
+// LCD Pins
+#define RS 3
+#define EN 2
+
+#define D4 0
+#define D5 7
+#define D6 9
+#define D7 8
+#define D_UNUSED 0
+
+#define LCD_POWER_ON  
+#define LCD_BACKLIGHT 14
+
 // define the structure of input object
-typedef struct input_object_s{
+typedef struct {
   boolean_t       value ;
   boolean_t       validity ;
   pthread_mutex_t mutex ;
 } input_object_t ;
 
-typedef enum input_element_e{
+typedef enum {
   input_BUTTON_1,
   nb_Of_Input_Elements
 } input_element_t ;
 
 // define the structure of output object
-typedef struct output_object_s{
+typedef struct {
   boolean_t       value ;
   boolean_t       validity ;
   pthread_mutex_t mutex ;
 } output_object_t ;
 
-typedef enum output_element_e{
+typedef enum {
   output_RLY_LAMP_1,
   output_RLY_LAMP_2,
   output_RLY_LAMP_3,
@@ -52,17 +86,18 @@ typedef enum output_element_e{
 } output_element_t ;
 
 // define an lcd message structure
-typedef struct lcd_message_s{
+typedef struct {
   char lcd_line_1 [16] ;
   char lcd_line_2 [16] ;
 } lcd_message_t ;
 
 // define a monitoring message structure
-typedef struct monitor_message_s{
+typedef struct {
   char message [255] ;
 } monitor_message_t ;
 
-typedef enum messages_elements_e{
+typedef enum {
+  NO_ACTIVE_MESSAGE,
   MESSAGE_1,
   MESSAGE_2,
   MESSAGE_3,
@@ -79,17 +114,19 @@ typedef enum messages_elements_e{
 /* define a structure of message that contains a field for lcd_message      */
 /* and a field for monitoring_message with the same meaning but with        */
 /* different density, monitoring_message is more detailled than lcd_message */
-typedef struct messages_object_s{
+typedef struct {
   messages_elements_t   id_message ;
   lcd_message_t         lcd_message ;
   monitor_message_t     monitor_message ;
 } messages_object_t ;
 
-typedef struct active_message_s{
+typedef struct {
   messages_elements_t   id_message ;
   boolean_t             printed_to_lcd ;
   boolean_t             sent_to_server ;
 } active_message_t ;
+
+// Define configuration structure
 /**********************/
 /* Public Data        */
 /**********************/
@@ -106,7 +143,10 @@ extern const messages_object_t messages_list_cst [ nb_Of_Messages ] ;
 
 // list of active messages to send to server and to print on LCD
 extern active_message_t active_message_list [ nb_OF_ACTIVE_MESSAGES] ;
-extern const active_message_t active_message_default_cst ;
+extern const active_message_t active_message_init_cst ;
+
+// LCD driver handler
+extern int  lcd_handler ;
 /**********************/
 /* Public Functions   */
 /**********************/
