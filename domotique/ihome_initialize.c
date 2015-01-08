@@ -20,4 +20,25 @@
 void *ihome_initialize ( void )
 {
 
+// local data
+unsigned int l_indx = 0 ;
+
+// initialize the input array
+for ( l_indx = 0 ; l_indx < nb_Of_Input_Elements ; l_indx++ )
+{
+  inputs_Array_Of_Elements [l_indx] = input_object_cst ;
+}
+
+// initialize the output array
+for ( l_indx = 0 ; l_indx < nb_Of_Output_Elements ; l_indx++ )
+{
+  outputs_Array_Of_Elements [l_indx] = output_object_cst ;
+}
+
+// initialize the active messages array
+for ( l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
+{
+  active_message_list [l_indx] = active_message_default_cst ;
+}
+
 }
