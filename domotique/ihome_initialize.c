@@ -37,7 +37,10 @@
 #include <wiringPi.h>
 #include <lcd.h>
 
-void *ihome_initialize ( void )
+#define TURN_PIN_ON(pin)  (pinMode(pin,   OUTPUT); digitalWrite (pin, HIGH) ;)
+#define TURN_PIN_OFF(pin) (pinMode(pin,   OUTPUT); digitalWrite (pin, LOW)  ;)
+
+int ihome_initialize ( void )
 {
 
 // local data
@@ -61,6 +64,9 @@ for ( l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
   active_message_list [l_indx] = active_message_init_cst ;
 }
 
+// initialize software configuration
+software_configuration = software_configuration_default ;
+
 // initialize LCD driver handler
 lcd_handler = 0;
 
@@ -70,35 +76,57 @@ wiringPiSetup();
 // initialize lcd driver
 lcd_handler = lcdInit( 2, 16, 4, RS, EN, D4, D5, D6, D7, D_UNUSED, D_UNUSED, D_UNUSED, D_UNUSED) ;
 
-//set LCD POWER and BACKLIGHT pins to out
-pinMode(LCD_POWER_ON,   OUTPUT);
-pinMode(LCD_BACKLIGHT,  OUTPUT);
+//turn LCD power and backlight ON or OFF
+if (software_configuration.turn_LCD_Power == ON)
+{
+  TURN_PIN_ON(LCD_POWER_ON)
+}
+else
+{
+  TURN_PIN_OFF(LCD_POWER_ON)
+}
 
-//turn LCD power and backlight ON
-digitalWrite (LCD_POWER_ON, HIGH) ;
-digitalWrite (LCD_BACKLIGHT, HIGH) ;
+if (software_configuration.turn_LCD_Backlight == ON)
+{
+  TURN_PIN_ON(LCD_BACKLIGHT)
+}
+else
+{
+  TURN_PIN_OFF(LCD_BACKLIGHT)
+}
 
 if(lcd_handler == -1 )
 {
   for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
   {
-    if ( active_message_list.[l_indx].id_message == NO_ACTIVE_MESSAGE )
+    if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
-      active_message_list.[l_indx].id_message = MESSAGE_1 ;
+      active_message_list[l_indx].id_message = MESSAGE_1 ;
       l_indx = nb_OF_ACTIVE_MESSAGES
     }
   }
+  return -1;
 }
 else 
 {
   for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
   {
-    if ( active_message_list.[l_indx].id_message == NO_ACTIVE_MESSAGE )
+    if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
-      active_message_list.[l_indx].id_message = MESSAGE_2 ;
+      active_message_list[l_indx].id_message = MESSAGE_2 ;
       l_indx = nb_OF_ACTIVE_MESSAGES
     }
   }
 }
 
+for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
+  {
+    if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
+    {
+      active_message_list[l_indx].id_message = MESSAGE_3 ;
+      l_indx = nb_OF_ACTIVE_MESSAGES
+    }
+  }
+  
+  return 0 ;
 }
