@@ -55,7 +55,7 @@ typedef unsigned char boolean_t;
 #define D7 8
 #define D_UNUSED 0
 
-#define LCD_POWER_ON  
+#define LCD_POWER_ON  6
 #define LCD_BACKLIGHT 14
 
 // define the structure of input object
@@ -132,14 +132,12 @@ typedef enum {
 } pin_state_t ;
 
 // define a structure for software configuration
-typedef struct {
-  union {
+typedef  union {
     unsigned int word ;
     struct {
       pin_state_t turn_LCD_Power      :1 ;
       pin_state_t turn_LCD_Backlight  :1 ;
     } options ;
-  }
 } sw_configuration_t ;
 
 // Define configuration structure
@@ -174,8 +172,8 @@ extern int  lcd_handler ;
 /**********************/
 
 extern int   ihome_initialize ( void ) ;
-extern void *ihome_monitor    ( void ) ;
-extern void *ihome_read       ( void ) ;
-extern void *ihome_update     ( void ) ;
-extern void *ihome_write      ( void ) ;
+extern void *ihome_monitor    ( void *prm) ;
+extern void *ihome_read       ( void *prm) ;
+extern void *ihome_update     ( void *prm) ;
+extern void *ihome_write      ( void *prm) ;
 

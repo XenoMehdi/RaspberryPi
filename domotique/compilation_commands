@@ -1,0 +1,3 @@
+gcc -c ihome_*.c
+gcc -o ihome_start *.o -lpthread -lwiringPi -lwiringPiDev
+

@@ -62,7 +62,7 @@ const active_message_t active_message_init_cst = {NO_ACTIVE_MESSAGE, FALSE, FALS
 sw_configuration_t software_configuration ;
 
 // default software configuration
-const sw_configuration_t software_configuration_default = 3 ; // set lcd and backlight on
+const sw_configuration_t software_configuration_default = {3} ; // set lcd and backlight on
 
 // LCD driver handler
 int  lcd_handler ;

@@ -37,8 +37,8 @@
 #include <wiringPi.h>
 #include <lcd.h>
 
-#define TURN_PIN_ON(pin)  (pinMode(pin,   OUTPUT); digitalWrite (pin, HIGH) ;)
-#define TURN_PIN_OFF(pin) (pinMode(pin,   OUTPUT); digitalWrite (pin, LOW)  ;)
+#define TURN_PIN_ON(pin)  pinMode( pin ,   OUTPUT); digitalWrite ( pin , HIGH) ;
+#define TURN_PIN_OFF(pin) pinMode( pin ,   OUTPUT); digitalWrite ( pin , LOW)  ;
 
 int ihome_initialize ( void )
 {
@@ -77,7 +77,7 @@ wiringPiSetup();
 lcd_handler = lcdInit( 2, 16, 4, RS, EN, D4, D5, D6, D7, D_UNUSED, D_UNUSED, D_UNUSED, D_UNUSED) ;
 
 //turn LCD power and backlight ON or OFF
-if (software_configuration.turn_LCD_Power == ON)
+if (software_configuration.options.turn_LCD_Power == ON)
 {
   TURN_PIN_ON(LCD_POWER_ON)
 }
@@ -86,7 +86,7 @@ else
   TURN_PIN_OFF(LCD_POWER_ON)
 }
 
-if (software_configuration.turn_LCD_Backlight == ON)
+if (software_configuration.options.turn_LCD_Backlight == ON)
 {
   TURN_PIN_ON(LCD_BACKLIGHT)
 }
@@ -102,7 +102,7 @@ if(lcd_handler == -1 )
     if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
       active_message_list[l_indx].id_message = MESSAGE_1 ;
-      l_indx = nb_OF_ACTIVE_MESSAGES
+      l_indx = nb_OF_ACTIVE_MESSAGES ;
     }
   }
   return -1;
@@ -114,7 +114,7 @@ else
     if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
       active_message_list[l_indx].id_message = MESSAGE_2 ;
-      l_indx = nb_OF_ACTIVE_MESSAGES
+      l_indx = nb_OF_ACTIVE_MESSAGES ;
     }
   }
 }
@@ -124,9 +124,9 @@ for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
     if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
       active_message_list[l_indx].id_message = MESSAGE_3 ;
-      l_indx = nb_OF_ACTIVE_MESSAGES
+      l_indx = nb_OF_ACTIVE_MESSAGES ;
     }
   }
-  
+
   return 0 ;
 }

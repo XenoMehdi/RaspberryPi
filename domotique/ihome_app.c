@@ -37,10 +37,10 @@
  
  #define nb_Of_Threads 4
  
- pthread_t write_thread ;
- pthread_t read_thread ;
- pthread_t monitor_thread ;
- pthread_t update_thread ;
+ pthread_t *write_thread ;
+ pthread_t *read_thread ;
+ pthread_t *monitor_thread ;
+ pthread_t *update_thread ;
  
  int threads_rtn[nb_Of_Threads];
  
@@ -70,14 +70,14 @@
     if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
       active_message_list[l_indx].id_message = MESSAGE_3 ;
-      l_indx = nb_OF_ACTIVE_MESSAGES
+      l_indx = nb_OF_ACTIVE_MESSAGES ;
     }
   }
   
-  pthread_join(write_thread,    NULL) ;
-  pthread_join(read_thread,     NULL) ;
-  pthread_join(monitor_thread,  NULL) ;
-  pthread_join(update_thread,   NULL) ;
+  pthread_join(*write_thread,    NULL) ;
+  pthread_join(*read_thread,     NULL) ;
+  pthread_join(*monitor_thread,  NULL) ;
+  pthread_join(*update_thread,   NULL) ;
   
  return 0;
  }
