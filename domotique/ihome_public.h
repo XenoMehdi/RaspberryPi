@@ -33,7 +33,7 @@
  *	 - first issue
  *	
  */
-
+#include <stdio.h>
 #include <pthread.h>
 
 /**********************/
@@ -126,6 +126,22 @@ typedef struct {
   boolean_t             sent_to_server ;
 } active_message_t ;
 
+typedef enum {
+  OFF,
+  ON
+} pin_state_t ;
+
+// define a structure for software configuration
+typedef struct {
+  union {
+    unsigned int word ;
+    struct {
+      pin_state_t turn_LCD_Power      :1 ;
+      pin_state_t turn_LCD_Backlight  :1 ;
+    } options ;
+  }
+} sw_configuration_t ;
+
 // Define configuration structure
 /**********************/
 /* Public Data        */
@@ -145,13 +161,19 @@ extern const messages_object_t messages_list_cst [ nb_Of_Messages ] ;
 extern active_message_t active_message_list [ nb_OF_ACTIVE_MESSAGES] ;
 extern const active_message_t active_message_init_cst ;
 
+// active software configuration
+extern sw_configuration_t software_configuration ;
+
+// default software configuration
+extern const sw_configuration_t software_configuration_default ;
+
 // LCD driver handler
 extern int  lcd_handler ;
 /**********************/
 /* Public Functions   */
 /**********************/
 
-extern void *ihome_initialize ( void ) ;
+extern int   ihome_initialize ( void ) ;
 extern void *ihome_monitor    ( void ) ;
 extern void *ihome_read       ( void ) ;
 extern void *ihome_update     ( void ) ;
