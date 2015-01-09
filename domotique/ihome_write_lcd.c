@@ -33,10 +33,12 @@
  *	 - first issue
  *	
  */
- #include "ihome_write_private."
+ #include "ihome_write_private.h"
  #include "ihome_public.h"
  
  void ihome_write_lcd ( lcd_message_t lcd_message )
  {
- 
+  // write to each line of lcd
+  lcdPosition (lcd_hundler, 0, 0) ; lcdPuts (lcd_hundler, lcd_message.lcd_line_1 ) ;
+  lcdPosition (lcd_hundler, 0, 1) ; lcdPuts (lcd_hundler, lcd_message.lcd_line_2 ) ;
  }
