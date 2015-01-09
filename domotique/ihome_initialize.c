@@ -101,7 +101,9 @@ if(lcd_handler == -1 )
   {
     if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
+      pthread_mutex_lock(&active_message_list[l_indx].mutex);
       active_message_list[l_indx].id_message = MESSAGE_1 ;
+      pthread_mutex_unlock(&active_message_list[l_indx].mutex);
       l_indx = nb_OF_ACTIVE_MESSAGES ;
     }
   }
@@ -113,7 +115,9 @@ else
   {
     if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
+      pthread_mutex_lock(&active_message_list[l_indx].mutex);
       active_message_list[l_indx].id_message = MESSAGE_2 ;
+      pthread_mutex_unlock(&active_message_list[l_indx].mutex);
       l_indx = nb_OF_ACTIVE_MESSAGES ;
     }
   }
@@ -123,7 +127,9 @@ for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
   {
     if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
+      pthread_mutex_lock(&active_message_list[l_indx].mutex);
       active_message_list[l_indx].id_message = MESSAGE_3 ;
+      pthread_mutex_unlock(&active_message_list[l_indx].mutex);
       l_indx = nb_OF_ACTIVE_MESSAGES ;
     }
   }
