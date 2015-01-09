@@ -115,7 +115,6 @@ typedef enum {
 /* and a field for monitoring_message with the same meaning but with        */
 /* different density, monitoring_message is more detailled than lcd_message */
 typedef struct {
-  messages_elements_t   id_message ;
   lcd_message_t         lcd_message ;
   monitor_message_t     monitor_message ;
 } messages_object_t ;
@@ -124,6 +123,7 @@ typedef struct {
   messages_elements_t   id_message ;
   boolean_t             printed_to_lcd ;
   boolean_t             sent_to_server ;
+  pthread_mutex_t       mutex ;
 } active_message_t ;
 
 typedef enum {
