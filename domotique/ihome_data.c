@@ -56,7 +56,7 @@ const messages_object_t messages_list_cst [ nb_Of_Messages ] = {
 
 // list of active messages to send to server and to print on LCD
 active_message_t active_message_list [ nb_OF_ACTIVE_MESSAGES] ;
-const active_message_t active_message_init_cst = {NO_ACTIVE_MESSAGE, FALSE, FALSE} ;
+const active_message_t active_message_init_cst = {NO_ACTIVE_MESSAGE, FALSE, FALSE, PTHREAD_MUTEX_INITIALIZER} ;
 
 // active software configuration
 sw_configuration_t software_configuration ;
