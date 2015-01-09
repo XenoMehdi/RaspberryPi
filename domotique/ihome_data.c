@@ -48,10 +48,10 @@ const output_object_t output_object_cst = { FALSE, FALSE, PTHREAD_MUTEX_INITIALI
 
 // List of defined messages 
 const messages_object_t messages_list_cst [ nb_Of_Messages ] = {
-                {NO_ACTIVE_MESSAGE, {"",""}, "" },
-                {MESSAGE_1, {"","LCD init fail"}, "LCD Initialization failed." },
-                {MESSAGE_2, {"","LCD init success"}, "LCD Initialization success." },
-                {MESSAGE_3, {"software init","successfully"}, "Initialization of Software's data success." }
+                {{"",""}, "" },
+                {{"","LCD init fail"}, {"LCD Initialization failed."} },
+                {{"","LCD init success"}, {"LCD Initialization success."} },
+                {{"software init","successfully"}, {"Initialization of Software's data success."} }
 };
 
 // list of active messages to send to server and to print on LCD
