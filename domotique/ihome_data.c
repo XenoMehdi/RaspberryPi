@@ -2,14 +2,14 @@
  *  declaration of all Software's datas.
  *
  *  @Module   ihome_data
- *  @author 	El Mehdi El Fakir
- *  @email		elmehdi@elfakir.me
- *  @website	--
+ *  @author   El Mehdi El Fakir
+ *  @email	  elmehdi@elfakir.me
+ *  @website  --
  *  @link		  --
- *	@version 	v1.0
- *	@compiler GCC
+ *  @version  v1.0
+ *  @compiler GCC
  *  @hardware Raspberry Pi B+
- *	@license	GNU GPL v3
+ *  @license  GNU GPL v3
  *	
  * |----------------------------------------------------------------------
  * | Copyright (C) FEZ EMBEDDED SYSTEMS INDUSTRY, 2015
