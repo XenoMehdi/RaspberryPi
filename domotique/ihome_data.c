@@ -2,10 +2,10 @@
  *  declaration of all Software's datas.
  *
  *  @Module   ihome_data
- *	@author 	El Mehdi El Fakir
- *	@email		elmehdi@elfakir.me
- *	@website	--
- *	@link		  --
+ *  @author 	El Mehdi El Fakir
+ *  @email		elmehdi@elfakir.me
+ *  @website	--
+ *  @link		  --
  *	@version 	v1.0
  *	@compiler GCC
  *  @hardware Raspberry Pi B+
