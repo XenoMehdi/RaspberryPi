@@ -34,6 +34,7 @@
  *	
  */
  #include "ihome_public.h"
+ #include <sched.h>
  
  #define nb_Of_Threads 4
  
