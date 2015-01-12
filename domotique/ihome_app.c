@@ -79,7 +79,7 @@
 
  write_param->sched_priority = 40;
  read_param->sched_priority  = 60 ;
- monitor_param>-sched_priority = 30 ;
+ monitor_param->sched_priority = 30 ;
  update_param->sched_priority = 50 ;
  
  pthread_attr_setschedparam ( write_attr, write_param ) ;

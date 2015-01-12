@@ -33,7 +33,7 @@
  *	 - first issue
  *	
  */
- #include "ihome_write_private.h"
+// #include "ihome_write_private.h"
  #include "ihome_public.h"
  
  void ihome_write_lcd ( lcd_message_t lcd_message )
