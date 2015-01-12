@@ -18,9 +18,5 @@
 
 void *ihome_update ( void *prm)
 {
-while(1)
-{
-  printf("Update thread\n");
-  sleep(2);
-}
+
 }

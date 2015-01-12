@@ -43,7 +43,7 @@
 typedef unsigned char boolean_t;
 #define TRUE ( 1 == 1 )
 #define FALSE ( 1 == 0 )
-#define nb_OF_ACTIVE_MESSAGES 5
+#define nb_OF_ACTIVE_MESSAGES 7
 
 // LCD Pins
 #define RS 3

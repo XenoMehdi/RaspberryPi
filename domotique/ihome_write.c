@@ -18,27 +18,26 @@
 
 void *ihome_write ( void *prm)
 {
-  unsigned int l_indx ;
+  unsigned int l_indx, activate_sleep ;
   // Update outputs
-  while(1)
-{
-  printf("Write thread\n");
-  sleep(1);
-}
   // Update message displayed on lcd's screen
   for (l_indx = 0; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
   {
     // For each element of active messages, if id is different of NO_ACTIVE_MESSAGE then print message
+    activate_sleep = 0 ;
+    pthread_mutex_lock(&active_message_list[l_indx].mutex);
     if (active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE)
     {
       if ( active_message_list[l_indx].printed_to_lcd == FALSE )
       {
-        ihome_write_lcd ( messages_list_cst[l_indx].lcd_message ) ;
-        sleep(0.5);
-        pthread_mutex_lock(&active_message_list[l_indx].mutex);
+        ihome_write_lcd ( messages_list_cst[
+			active_message_list[l_indx].id_message
+			].lcd_message ) ;
         active_message_list[l_indx].printed_to_lcd = TRUE ;
-        pthread_mutex_unlock(&active_message_list[l_indx].mutex);
+	activate_sleep = 1 ;
       }
     }
+    pthread_mutex_unlock(&active_message_list[l_indx].mutex);
+    (activate_sleep == 1 ) ? sleep(2) : sleep(0.1) ;
   }
 }

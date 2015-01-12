@@ -18,9 +18,5 @@
 
 void *ihome_read ( void *prm)
 {
-while(1)
-{
-  printf("Read thread\n");
-  sleep(1);
-}
+
 }
