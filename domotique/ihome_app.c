@@ -42,6 +42,16 @@
  pthread_t *monitor_thread ;
  pthread_t *update_thread ;
  
+ pthread_attr_t *write_attr ;
+ pthread_attr_t *read_attr ;
+ pthread_attr_t *monitor_attr ;
+ pthread_attr_t *update_attr ;
+ 
+ struct sched_param *write_param ;
+ struct sched_param *read_param ;
+ struct sched_param *monitor_param ;
+ struct sched_param *update_param ;
+ 
  int threads_rtn[nb_Of_Threads];
  
  int main( )
@@ -50,10 +60,36 @@
  
  ihome_initialize () ;
  
- threads_rtn [0] = pthread_create (write_thread,    NULL, ihome_write,    NULL) ;
- threads_rtn [1] = pthread_create (read_thread,     NULL, ihome_read,     NULL) ;
- threads_rtn [2] = pthread_create (monitor_thread,  NULL, ihome_monitor,  NULL) ;
- threads_rtn [3] = pthread_create (update_thread,   NULL, ihome_update,   NULL) ;
+ pthread_attr_init ( write_attr ) ;
+ pthread_attr_init ( read_attr ) ;
+ pthread_attr_init ( monitor_attr ) ;
+ pthread_attr_init ( update_attr ) ;
+
+ pthread_attr_setinheritsched ( write_attr, PTHREAD_EXPLICIT_SCHED ) ;
+ pthread_attr_setinheritsched ( read_attr, PTHREAD_EXPLICIT_SCHED ) ;
+ pthread_attr_setinheritsched ( monitor_attr, PTHREAD_EXPLICIT_SCHED ) ;
+ pthread_attr_setinheritsched ( update_attr, PTHREAD_EXPLICIT_SCHED ) ;
+
+ pthread_attr_setschedpolicy  ( write_attr, SCHED_RR ) ;
+ pthread_attr_setschedpolicy  ( read_attr, SCHED_RR ) ;
+ pthread_attr_setschedpolicy  ( monitor_attr, SCHED_RR ) ;
+ pthread_attr_setschedpolicy  ( update_attr, SCHED_RR ) ;
+
+
+ write_param->sched_priority = 40;
+ read_param->sched_priority  = 60 ;
+ monitor_param>-sched_priority = 30 ;
+ update_param->sched_priority = 50 ;
+ 
+ pthread_attr_setschedparam ( write_attr, write_param ) ;
+ pthread_attr_setschedparam ( read_attr, read_param ) ;
+ pthread_attr_setschedparam ( monitor_attr, monitor_param ) ;
+ pthread_attr_setschedparam ( update_attr, update_param ) ;
+ 
+ threads_rtn [0] = pthread_create (write_thread,    write_attr,   ihome_write,    NULL) ;
+ threads_rtn [1] = pthread_create (read_thread,     read_attr,    ihome_read,     NULL) ;
+ threads_rtn [2] = pthread_create (monitor_thread,  monitor_attr, ihome_monitor,  NULL) ;
+ threads_rtn [3] = pthread_create (update_thread,   update_attr,  ihome_update,   NULL) ;
  
  if ( (threads_rtn [0] || threads_rtn [1] || threads_rtn [2] || threads_rtn [3] ) == 0 )
  {
@@ -79,5 +115,10 @@
   pthread_join(*monitor_thread,  NULL) ;
   pthread_join(*update_thread,   NULL) ;
   
+ pthread_attr_destroy ( write_attr ) ;
+ pthread_attr_destroy ( read_attr ) ;
+ pthread_attr_destroy ( monitor_attr ) ;
+ pthread_attr_destroy ( update_attr ) ;
+
  return 0;
  }
