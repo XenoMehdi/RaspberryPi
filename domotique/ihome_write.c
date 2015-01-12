@@ -13,14 +13,18 @@
 *  Written by  : E. EL FAKIR                                 Date : 07/01/2015 *
 *                                                                              *
 ********************************************************************************/
-
+#include <time.h>
 #include "ihome_public.h"
 
 void *ihome_write ( void *prm)
 {
   unsigned int l_indx ;
   // Update outputs
-  
+  while(1)
+{
+  printf("Write thread\n");
+  sleep(1);
+}
   // Update message displayed on lcd's screen
   for (l_indx = 0; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
   {
