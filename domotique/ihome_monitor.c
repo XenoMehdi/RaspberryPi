@@ -47,21 +47,18 @@ void error(const char *msg) { perror(msg); exit(0); }
 void *ihome_monitor ( void *prm)
 {
   /* first what are we going to send and where are we going to send it? */
-    int portnbr =        443;
+    int portnbr =       80;
     char *host =        "data.sparkfun.com";
     char *message_fmt = 
-    "POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s HTTP/1.0\n\n";
-
+  "POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s HTTP/1.1\n\n";
     struct hostent *server;
     struct sockaddr_in serv_addr;
-    int sockfd, bytes, sent, received, total;
-    char message[1024],response[4096];
-
-    //if (argc < 3) { puts("Parameters: <apikey> <command>"); exit(0); }
-
+    int sockfd, bytes, sent, received, total, l_indx;
+    char message[1024],response[500], *e1, *e2;
+    while(1){
+//printf("Monitor is running\n");
     /* fill in the parameters */
-    sprintf(message,message_fmt,"2mP7ZjdbvVcbn8m92Vm9","0:0:0:0:0:0","message from monitor thread","0:0:0:0:0:0:0");
-    printf("Request:\n%s\n",message);
+    sprintf(message,message_fmt,"2mP7ZjdbvVcbn8m92Vm9","0:0:0:0:0:0","iHome+monitoring","0:0:0:0:0:0:0");
 
     /* create the socket */
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -75,7 +72,7 @@ void *ihome_monitor ( void *prm)
     memset(&serv_addr,0,sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(portnbr);
-    memcpy(&serv_addr.sin_addr.s_addr,server->h_addr,server->h_length);
+    memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
 
     /* connect the socket */
     if (connect(sockfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
@@ -112,7 +109,30 @@ void *ihome_monitor ( void *prm)
     /* close the socket */
     close(sockfd);
 
-    /* process response */
-    printf("Response:\n%s\n",response);
-
+   /* process response */
+   e1 = strstr(response, "\r\n\r\n");
+   if(e1 != NULL)
+   {
+    e2 = strstr(e1, "1");
+    if (e2 == NULL)
+    e2 = strstr(e1, "0");
+    
+    if (e2 != NULL && e2[0] == '0')
+    {
+	for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
+  	{
+    		if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
+    		{
+      		active_message_list[l_indx].id_message = MESSAGE_6 ;
+      		l_indx = nb_OF_ACTIVE_MESSAGES ;
+    		}
+    		else if ( active_message_list[l_indx].id_message == MESSAGE_6 )
+      		{
+		l_indx = nb_OF_ACTIVE_MESSAGES ;
+		}
+  	}
+    }
+   }
+	sleep(10);
+	}
 }

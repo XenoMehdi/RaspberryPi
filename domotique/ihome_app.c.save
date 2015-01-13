@@ -1,4 +1,4 @@
-/**
+-/**
  *	activation point for iHome Software.
  *
  *  @Module   ihome_app
@@ -76,9 +76,9 @@
  pthread_attr_setschedpolicy  ( &monitor_attr, SCHED_RR ) ;
  pthread_attr_setschedpolicy  ( &update_attr, SCHED_RR ) ;
 
- write_param.sched_priority = 40;
+ write_param.sched_priority = 80;
  read_param.sched_priority  = 60 ;
- monitor_param.sched_priority = 70 ;
+ monitor_param.sched_priority = 30 ;
  update_param.sched_priority = 50 ;
 
  pthread_attr_setschedparam ( &write_attr, &write_param ) ;
@@ -100,16 +100,18 @@
  printf("creation of threads fail\n");
  return -1;
  }
-
+ 
  if(  ihome_init_status == 0 )
  {
  for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
   {
+    pthread_mutex_lock(&active_message_list[l_indx].mutex);
     if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
     {
       active_message_list[l_indx].id_message = MESSAGE_5 ;
       l_indx = nb_OF_ACTIVE_MESSAGES ;
     }
+    pthread_mutex_unlock(&active_message_list[l_indx].mutex);
   }
  }
 
@@ -117,7 +119,7 @@
   pthread_join(read_thread,     NULL) ;
   pthread_join(monitor_thread,  NULL) ;
   pthread_join(update_thread,   NULL) ;
-
+  
  pthread_attr_destroy ( &write_attr ) ;
  pthread_attr_destroy ( &read_attr ) ;
  pthread_attr_destroy ( &monitor_attr ) ;

@@ -51,9 +51,10 @@ const messages_object_t messages_list_cst [ nb_Of_Messages ] = {
                 {{"",""}, {""} },
 		{{"    Welcome",""}, {""} },
 		{{" Copyright 2015","     F.E.S.I"}, {""} },
-                {{"","LCD init fail"}, {"LCD Initialization failed."} },
-                {{"","LCD init success"}, {"LCD Initialization success."} },
-                {{"software init","successfully"}, {"Initialization of Software's data success."} }
+                {{"","LCD init fail"}, {"LCD+Initialization+failed."} },
+                {{"","LCD init success"}, {"LCD+Initialization+success."} },
+                {{"software init","successfully"}, {"Initialization+of+Software+data+success."} },
+                {{"send data to","phant.io fail"}, {""} }
 };
 
 // list of active messages to send to server and to print on LCD
