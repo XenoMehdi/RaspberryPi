@@ -34,105 +34,144 @@
  */
 
 #include "ihome_public.h"
+#include "ihome_private_private.h"
 
 #include <stdio.h> /* printf, sprintf */
 #include <stdlib.h> /* read, write, close */
-#include <string.h> /* memcpy, memset */
-#include <sys/socket.h> /* socket, connect */
-#include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
-#include <netdb.h> /* struct hostent, gethostbyname */
-
-void error(const char *msg) { perror(msg); exit(0); }
 
 void *ihome_monitor ( void *prm)
 {
-  /* first what are we going to send and where are we going to send it? */
-    int portnbr =       80;
-    char *host =        "data.sparkfun.com";
-    char *message_fmt = 
-  "POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s HTTP/1.1\n\n";
-    struct hostent *server;
-    struct sockaddr_in serv_addr;
-    int sockfd, bytes, sent, received, total, l_indx;
-    char message[1024],response[500], *e1, *e2;
-    while(1){
-//printf("Monitor is running\n");
-    /* fill in the parameters */
-    sprintf(message,message_fmt,"2mP7ZjdbvVcbn8m92Vm9","0:0:0:0:0:0","iHome+monitoring","0:0:0:0:0:0:0");
+	int l_indx ;
+  while(1){
+  /* fill in the parameters : input_buffer */
+  memset(input_buffer, 0, sizeof(input_buffer));
+  for(l_indx = 0 ; l_indx < nb_Of_Input_Elements - 1 ; l_indx++)
+  {
+  	strcat(input_buffer, inputs_Array_Of_Elements[l_indx].value );
+  	strcat(input_buffer, ":");
+  }
+  strcat(input_buffer, inputs_Array_Of_Elements[l_indx].value );
+  
+    /* fill in the parameters : output_buffer */
+  memset(output_buffer, 0, sizeof(output_buffer));
+  for(l_indx = 0 ; l_indx < nb_Of_Output_Elements  - 1 ; l_indx++)
+  {
+  	strcat(output_buffer, outputs_Array_Of_Elements[l_indx].value );
+  	strcat(output_buffer, ":");
+  }
+  strcat(output_buffer, outputs_Array_Of_Elements[l_indx].value );
+  
+    /* fill in the parameters : message_buffer */
+  memset(message_buffer, 0, sizeof(message_buffer));
+  for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES - 1 ; l_indx++)
+  {
+  	if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
+			{
+		  	strcat(message_buffer, messages_list_cst [active_message_list[l_indx].id_message]  );
+		  	strcat(message_buffer, ",+");
+			}
+  }
+  if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
+  {
+  	strcat(message_buffer, messages_list_cst [active_message_list[l_indx].id_message]  );
+  }
+  
+  sprintf(message,http_request,private_key,input_buffer,message_buffer,output_buffer);
 
-    /* create the socket */
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) error("ERROR opening socket");
+  /* create the socket */
+  sockfd = socket(AF_INET, SOCK_STREAM, 0);
+  if (sockfd < 0)
+  {
+  	perror("ERROR opening socket");
+  	exit(0);
+  }
 
-    /* lookup the ip address */
-    server = gethostbyname(host);
-    if (server == NULL) error("ERROR, no such host");
+  /* lookup the ip address */
+  server = gethostbyname(host);
+  if (server == NULL)
+  {
+  	perror("ERROR, no such host");
+  	exit(0);
+  }
 
-    /* fill in the structure */
-    memset(&serv_addr,0,sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(portnbr);
-    memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
+  /* fill in the structure */
+  memset(&serv_addr,0,sizeof(serv_addr));
+  serv_addr.sin_family = AF_INET;
+  serv_addr.sin_port = htons(port);
+  memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
 
-    /* connect the socket */
-    if (connect(sockfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
-        error("ERROR connecting");
+  /* connect the socket */
+  if (connect(sockfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
+      error("ERROR connecting");
 
-    /* send the request */
-    total = strlen(message);
-    sent = 0;
-    do {
-        bytes = write(sockfd,message+sent,total-sent);
-        if (bytes < 0)
-            error("ERROR writing message to socket");
-        if (bytes == 0)
-            break;
-        sent+=bytes;
-    } while (sent < total);
+  /* send the request */
+  total = strlen(message);
+  sent = 0;
+  do {
+      bytes = write(sockfd,message+sent,total-sent);
+      if (bytes < 0)
+      {
+          perror("ERROR writing message to socket");
+          exit(0);
+      }
+      if (bytes == 0)
+          break;
+      sent+=bytes;
+  } while (sent < total);
 
-    /* receive the response */
-    memset(response,0,sizeof(response));
-    total = sizeof(response)-1;
-    received = 0;
-    do {
-        bytes = read(sockfd,response-received,total-received);
-        if (bytes < 0)
-            error("ERROR reading response from socket");
-        if (bytes == 0)
-            break;
-        received+=bytes;
-    } while (received < total);
+  /* receive the response */
+  memset(response,0,sizeof(response));
+  total = sizeof(response)-1;
+  received = 0;
+  do {
+      bytes = read(sockfd,response-received,total-received);
+      if (bytes < 0)
+      {
+          perror("ERROR reading response from socket");
+          exit(0);
+      }
+      if (bytes == 0)
+          break;
+      received+=bytes;
+  } while (received < total);
 
-    if (received == total)
-        error("ERROR storing complete response from socket");
+  if (received == total)
+  {
+  	perror("ERROR storing complete response from socket");
+  	exit(0);
+  }
 
-    /* close the socket */
-    close(sockfd);
+  /* close the socket */
+  close(sockfd);
 
-   /* process response */
-   e1 = strstr(response, "\r\n\r\n");
-   if(e1 != NULL)
-   {
-    e2 = strstr(e1, "1");
-    if (e2 == NULL)
-    e2 = strstr(e1, "0");
-    
-    if (e2 != NULL && e2[0] == '0')
-    {
-	for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
-  	{
-    		if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
-    		{
-      		active_message_list[l_indx].id_message = MESSAGE_6 ;
-      		l_indx = nb_OF_ACTIVE_MESSAGES ;
-    		}
-    		else if ( active_message_list[l_indx].id_message == MESSAGE_6 )
-      		{
-		l_indx = nb_OF_ACTIVE_MESSAGES ;
+ /* process response */
+ e1 = strstr(response, "\r\n\r\n");
+ if(e1 != NULL)
+ {
+  e2 = strstr(e1, "1");
+  if (e2 == NULL)
+  e2 = strstr(e1, "0");
+  
+  if (e2[0] == '0')
+  {
+		for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
+		{
+			if ( active_message_list[l_indx].id_message == NO_ACTIVE_MESSAGE )
+			{
+				active_message_list[l_indx].id_message = MESSAGE_6 ;
+				l_indx = nb_OF_ACTIVE_MESSAGES ;
+			}
+			else if ( active_message_list[l_indx].id_message == MESSAGE_6 )
+			{
+				l_indx = nb_OF_ACTIVE_MESSAGES ;
+			}
 		}
-  	}
-    }
-   }
-	sleep(10);
-	}
+  }
+  else if (e2[0] == '0')
+  {
+  	
+  }
+ }
+ sleep(10);
+  }
 }
