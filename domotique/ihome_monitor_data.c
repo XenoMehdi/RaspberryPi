@@ -55,7 +55,7 @@ char message[1024],response[500], *e1, *e2;
 
 /* http post request fields */
 char *private_key = "2mP7ZjdbvVcbn8m92Vm9" ;
-char input_buffer  [ 2*nb_Of_Input_Elements - 1 ];
-char output_buffer [ 2*nb_Of_Output_Elements - 1 ];
-char message_buffer [ 57*nb_OF_ACTIVE_MESSAGES - 2 ]; // 55 char per message + 2 for , & space
+char input_buffer  [ 2*8 - 1 ];
+char output_buffer [ 2*8 - 1 ];
+char message_buffer [ 57*8 - 2 ]; // 55 char per message + 2 for , & space
 
