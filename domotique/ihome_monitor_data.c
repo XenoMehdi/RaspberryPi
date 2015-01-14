@@ -32,7 +32,7 @@
  *	 - January 14, 2015
  *	 - first issue
  */
-#include "ihome_private_private.h"
+#include "ihome_monitor_private.h"
 
 
 /**********************/
