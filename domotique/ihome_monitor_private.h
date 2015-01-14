@@ -32,7 +32,8 @@
  *	 - January 14, 2015
  *	 - first issue
  */
- #include <string.h> /* memcpy, memset */
+#include "ihome_public.h"
+#include <string.h> /* memcpy, memset */
 #include <sys/socket.h> /* socket, connect */
 #include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
 #include <netdb.h> /* struct hostent, gethostbyname */
