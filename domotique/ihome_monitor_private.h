@@ -43,22 +43,21 @@
 /**********************/
 
 /* server configuration */
-int   port =    80;
-char *host =    "data.sparkfun.com";
-char *http_request = 
-"POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s HTTP/1.1\n\n";
+extern int   port ;
+extern char *host ;
+extern char *http_request ;
 
 /* socket data */ 
-struct hostent *server;
-struct sockaddr_in serv_addr;
-int sockfd, bytes, sent, received, total, l_indx;
+extern struct hostent *server;
+extern struct sockaddr_in serv_addr;
+extern int sockfd, bytes, sent, received, total, l_indx;
 
 /* sent and received messages */
-char message[1024],response[500], *e1, *e2;
+extern char message[1024],response[500], *e1, *e2;
 
 /* http post request fields */
-char *private_key = "2mP7ZjdbvVcbn8m92Vm9" ;
-char input_buffer  [ 2*nb_Of_Input_Elements - 1 ];
-char output_buffer [ 2*nb_Of_Output_Elements - 1 ];
-char message_buffer [ 57*nb_OF_ACTIVE_MESSAGES - 2 ]; // 55 char per message + 2 for , & space
+extern char *private_key ;
+extern char input_buffer  [ 2*nb_Of_Input_Elements - 1 ];
+extern char output_buffer [ 2*nb_Of_Output_Elements - 1 ];
+extern char message_buffer [ 57*nb_OF_ACTIVE_MESSAGES - 2 ]; // 55 char per message + 2 for , & space
 
