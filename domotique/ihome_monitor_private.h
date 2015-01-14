@@ -58,7 +58,7 @@ extern char message[1024],response[500], *e1, *e2;
 
 /* http post request fields */
 extern char *private_key ;
-extern char input_buffer  [ 2*nb_Of_Input_Elements - 1 ];
-extern char output_buffer [ 2*nb_Of_Output_Elements - 1 ];
-extern char message_buffer [ 57*nb_OF_ACTIVE_MESSAGES - 2 ]; // 55 char per message + 2 for , & space
+extern char input_buffer  [ 2*8 - 1 ];
+extern char output_buffer [ 2*8 - 1 ];
+extern char message_buffer [ 57*7 - 2 ]; // 55 char per message + 2 for , & space
 
