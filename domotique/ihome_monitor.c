@@ -37,6 +37,11 @@
 
 #include <stdio.h> /* printf, sprintf */
 #include <stdlib.h> /* read, write, close */
+#include <string.h> /* memcpy, memset */
+#include <sys/socket.h> /* socket, connect */
+#include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
+#include <netdb.h> /* struct hostent, gethostbyname */
+
 
 /* server configuration */
 int   port =    80;
