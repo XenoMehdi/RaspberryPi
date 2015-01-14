@@ -71,36 +71,36 @@ void *ihome_monitor ( void *prm)
   memset(input_buffer, 0, sizeof(input_buffer));
   for(l_indx = 0 ; l_indx < nb_Of_Input_Elements - 1 ; l_indx++)
   {
-  	strcat(input_buffer, inputs_Array_Of_Elements[l_indx].value );
-  	strcat(input_buffer, ":");
+  //	strcat(input_buffer, inputs_Array_Of_Elements[l_indx].value );
+  //	strcat(input_buffer, ":");
   }
-  strcat(input_buffer, inputs_Array_Of_Elements[l_indx].value );
+ // strcat(input_buffer, inputs_Array_Of_Elements[l_indx].value );
   
     /* fill in the parameters : output_buffer */
-  memset(output_buffer, 0, sizeof(output_buffer));
+ // memset(output_buffer, 0, sizeof(output_buffer));
   for(l_indx = 0 ; l_indx < nb_Of_Output_Elements  - 1 ; l_indx++)
   {
-  	strcat(output_buffer, outputs_Array_Of_Elements[l_indx].value );
-  	strcat(output_buffer, ":");
+  //	strcat(output_buffer, outputs_Array_Of_Elements[l_indx].value );
+  //	strcat(output_buffer, ":");
   }
-  strcat(output_buffer, outputs_Array_Of_Elements[l_indx].value );
+ // strcat(output_buffer, outputs_Array_Of_Elements[l_indx].value );
   
     /* fill in the parameters : message_buffer */
-  memset(message_buffer, 0, sizeof(message_buffer));
+ // memset(message_buffer, 0, sizeof(message_buffer));
   for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES - 1 ; l_indx++)
   {
   	if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
 			{
-		  	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message  );
-		  	strcat(message_buffer, ",+");
+//		  	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message  );
+//		  	strcat(message_buffer, ",+");
 			}
   }
   if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
   {
-  	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message  );
+  //	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message  );
   }
   
-  sprintf(message,http_request,private_key,input_buffer,message_buffer,output_buffer);
+ // sprintf(message,http_request,private_key,input_buffer,message_buffer,output_buffer);
 
   /* create the socket */
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
