@@ -34,7 +34,7 @@
  */
 
 #include "ihome_public.h"
-#include "ihome_private_private.h"
+#include "ihome_monitor_private.h"
 
 #include <stdio.h> /* printf, sprintf */
 #include <stdlib.h> /* read, write, close */
@@ -67,13 +67,13 @@ void *ihome_monitor ( void *prm)
   {
   	if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
 			{
-		  	strcat(message_buffer, messages_list_cst [active_message_list[l_indx].id_message]  );
+		  	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message  );
 		  	strcat(message_buffer, ",+");
 			}
   }
   if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
   {
-  	strcat(message_buffer, messages_list_cst [active_message_list[l_indx].id_message]  );
+  	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message  );
   }
   
   sprintf(message,http_request,private_key,input_buffer,message_buffer,output_buffer);
