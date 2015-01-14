@@ -167,9 +167,17 @@ void *ihome_monitor ( void *prm)
 			}
 		}
   }
-  else if (e2[0] == '0')
+  else if (e2[0] == '1')
   {
-  	
+  	for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++)
+		{
+			if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
+			{
+			    pthread_mutex_lock(&active_message_list[l_indx].mutex);
+			    active_message_list[l_indx].sent_to_server = TRUE ;
+			    pthread_mutex_unlock(&active_message_list[l_indx].mutex);
+			}
+		}
   }
  }
  sleep(10);
