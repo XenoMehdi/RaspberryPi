@@ -34,10 +34,29 @@
  */
 
 #include "ihome_public.h"
-#include "ihome_monitor_private.h"
 
 #include <stdio.h> /* printf, sprintf */
 #include <stdlib.h> /* read, write, close */
+
+/* server configuration */
+int   port =    80;
+char *host =    "data.sparkfun.com";
+char *http_request = 
+"POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s HTTP/1.1\n\n";
+
+/* socket data */ 
+struct hostent *server;
+struct sockaddr_in serv_addr;
+int sockfd, bytes, sent, received, total, l_indx;
+
+/* sent and received messages */
+char message[1024],response[500], *e1, *e2;
+
+/* http post request fields */
+char *private_key = "2mP7ZjdbvVcbn8m92Vm9" ;
+char input_buffer  [ 2*8 - 1 ];
+char output_buffer [ 2*8 - 1 ];
+char message_buffer [ 57*7 - 2 ]; // 55 char per message + 2 for , & space
 
 void *ihome_monitor ( void *prm)
 {
