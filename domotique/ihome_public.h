@@ -33,6 +33,9 @@
  *	 - first issue
  *	
  */
+#ifndef IHOME_PUBLIC_H
+#define IHOME_PUBLIC_H
+
 #include <stdio.h>
 #include <pthread.h>
 
@@ -177,3 +180,4 @@ extern void *ihome_read       ( void *prm) ;
 extern void *ihome_update     ( void *prm) ;
 extern void *ihome_write      ( void *prm) ;
 
+#endif
