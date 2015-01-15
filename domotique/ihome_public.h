@@ -87,8 +87,8 @@ typedef enum {
 
 // define an lcd message structure
 typedef struct {
-  char lcd_line_1 [16] ;
-  char lcd_line_2 [16] ;
+  char lcd_line_1 [17] ;
+  char lcd_line_2 [17] ;
 } lcd_message_t ;
 
 // define a monitoring message structure
