@@ -49,10 +49,10 @@ const output_object_t output_object_cst = { FALSE, FALSE, PTHREAD_MUTEX_INITIALI
 // List of defined messages 
 const messages_object_t messages_list_cst [ nb_Of_Messages ] = {
                 {{"",""}, {""} },
-		{{"    Welcome",""}, {""} },
-		{{" Copyright 2015","     F.E.S.I"}, {""} },
-                {{"","LCD init fail"}, {"LCD+Initialization+failed."} },
-                {{"","LCD init success"}, {"LCD+Initialization+success."} },
+		{{"    WELCOME",""}, {"Welcome"} },
+		{{" COPYRIGHT 2015","     F.E.S.I"}, {"Copyright+2015+F.E.S.I"} },
+                {{"","LCD INIT FAILED"}, {"LCD+Initialization+failed."} },
+                {{"","LCD INIT SUCCESS"}, {"LCD+Initialization+success."} },
                 {{"software init","successfully"}, {"Initialization+of+Software+data+success."} },
                 {{"send data to","phant.io fail"}, {""} }
 };
