@@ -46,7 +46,9 @@
 typedef unsigned char boolean_t;
 #define TRUE ( 1 == 1 )
 #define FALSE ( 1 == 0 )
+
 #define nb_OF_ACTIVE_MESSAGES 7
+#define nb_Of_Config_Elements 1
 
 // LCD Pins
 #define RS 3
@@ -69,7 +71,14 @@ typedef struct {
 } input_object_t ;
 
 typedef enum {
-  input_BUTTON_1,
+  input_1,
+  input_2,
+  input_3,
+  input_4,
+  input_5,
+  input_6,
+  input_7,
+  input_8,
   nb_Of_Input_Elements
 } input_element_t ;
 
@@ -81,12 +90,43 @@ typedef struct {
 } output_object_t ;
 
 typedef enum {
-  output_RLY_LAMP_1,
-  output_RLY_LAMP_2,
-  output_RLY_LAMP_3,
-  output_RLY_LAMP_4,
+  output_RLY_1,
+  output_RLY_2,
+  output_RLY_3,
+  output_RLY_4,
+  output_RLY_5,
+  output_RLY_6,
+  output_RLY_7,
+  output_RLY_8,
   nb_Of_Output_Elements
 } output_element_t ;
+
+// define the structure of configuration object
+typedef enum{
+  NORMAL_RELAY,
+  PERIODIC_TRIGGERING
+} output_type_t ;
+
+// define the structure of configuration object
+typedef struct{
+  output_type_t type_of_output  ;
+  boolean_t     active_on_high  ;
+  unsigned int  time_before_activation ;
+  unsigned int  time_before_deactivation ;
+  unsigned char repetition       ;
+  unsigned int  interval_minutes ;
+  unsigned int  time_of_set ;
+  unsigned int  time_of_reset  ;
+} config_object_t ;
+
+// define the structure of contexte object
+typedef struct context_object_s{
+  input_object_t *input ;
+  output_object_t *output ;
+  config_object_t *config ;
+  struct context_object_s *prev ;
+  struct context_object_s *next ;
+} context_object_t ;
 
 // define an lcd message structure
 typedef struct {
@@ -170,6 +210,11 @@ extern const sw_configuration_t software_configuration_default ;
 
 // LCD driver handler
 extern int  lcd_handler ;
+
+// initial context object
+extern config_object_t config_Array_Of_Elements[nb_Of_Config_Elements];
+extern context_object_t context_pile;
+
 /**********************/
 /* Public Functions   */
 /**********************/

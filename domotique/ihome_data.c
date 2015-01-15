@@ -48,13 +48,13 @@ const output_object_t output_object_cst = { FALSE, FALSE, PTHREAD_MUTEX_INITIALI
 
 // List of defined messages 
 const messages_object_t messages_list_cst [ nb_Of_Messages ] = {
-                {{"",""}, {""} },
+                {{"     iHome","    Running"}, {"iHome+is+running"} },
 		{{"    WELCOME",""}, {"Welcome"} },
 		{{" COPYRIGHT 2015","     F.E.S.I"}, {"Copyright+2015+F.E.S.I"} },
-                {{"","LCD INIT FAILED"}, {"LCD+Initialization+failed."} },
-                {{"","LCD INIT SUCCESS"}, {"LCD+Initialization+success."} },
-                {{"software init","successfully"}, {"Initialization+of+Software+data+success."} },
-                {{"send data to","phant.io fail"}, {""} }
+                {{"","LCD INIT FAILED"}, {"LCD+Initialization+failed"} },
+                {{"","LCD INIT SUCCESS"}, {"LCD+Initialization+success"} },
+                {{" SOFTWARE INIT","  SUCCESSFULLY"}, {"Initialization+of+Software+data+success"} },
+                {{"SEND DATA TO","phant.io FAIL"}, {""} }
 };
 
 // list of active messages to send to server and to print on LCD
@@ -69,3 +69,13 @@ const sw_configuration_t software_configuration_default = {3} ; // set lcd and b
 
 // LCD driver handler
 int  lcd_handler ;
+
+// initialize context pile with the first input, output and confiduration in the array : to be updated
+config_object_t config_Array_Of_Elements [ nb_Of_Config_Elements ];
+context_object_t context_pile = { 
+					&inputs_Array_Of_Elements[0],
+			                &outputs_Array_Of_Elements[0],
+			                &config_Array_Of_Elements[0],
+			                NULL,
+			                NULL };
+

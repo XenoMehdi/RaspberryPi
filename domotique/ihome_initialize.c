@@ -58,6 +58,17 @@ for ( l_indx = 0 ; l_indx < nb_Of_Output_Elements ; l_indx++ )
   outputs_Array_Of_Elements [l_indx] = output_object_cst ;
 }
 
+// initialize config array
+config_Array_Of_Elements[0].type_of_output = NORMAL_RELAY ;
+config_Array_Of_Elements[0].active_on_high = TRUE ;
+config_Array_Of_Elements[0].time_before_activation = 0 ;
+config_Array_Of_Elements[0].time_before_deactivation = 0 ;
+config_Array_Of_Elements[0].repetition = 0 ;
+config_Array_Of_Elements[0].interval_minutes = 0 ;
+config_Array_Of_Elements[0].time_of_set = 0 ;
+config_Array_Of_Elements[0].time_of_reset = 0 ;
+
+
 // initialize the active messages array
 for ( l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
 {
@@ -113,6 +124,9 @@ else
 {
   TURN_PIN_OFF(LCD_BACKLIGHT)
 }
+
+	lcdHome (lcd_handler);
+	lcdClear (lcd_handler);
 
 if(lcd_handler == -1 )
 {

@@ -65,20 +65,23 @@ char message_buffer [ 57*nb_OF_ACTIVE_MESSAGES - 2 ]; // 55 char per message + 2
 
 void *ihome_monitor ( void *prm)
 {
-	int l_indx ;
+
+  int l_indx ;
+  usleep(2000000);
+
   while(1){
   /* fill in the parameters : input_buffer */
   memset(input_buffer, ':', sizeof(input_buffer));
-  for(l_indx = 0 ; l_indx < nb_Of_Input_Elements - 1 ; l_indx++)
+  for(l_indx = 0 ; l_indx < nb_Of_Input_Elements ; l_indx++)
   {
-	*(input_buffer + l_indx*2) = inputs_Array_Of_Elements[l_indx].value;
+	*(input_buffer + l_indx*2) = inputs_Array_Of_Elements[l_indx].value + 48;
   }
 
   /* fill in the parameters : output_buffer */
   memset(output_buffer, ':', sizeof(output_buffer));
-  for(l_indx = 0 ; l_indx < nb_Of_Output_Elements  - 1 ; l_indx++)
+  for(l_indx = 0 ; l_indx < nb_Of_Output_Elements ; l_indx++)
   {
-	*(output_buffer + l_indx*2) = outputs_Array_Of_Elements[l_indx].value ;
+	*(output_buffer + l_indx*2) = outputs_Array_Of_Elements[l_indx].value +48 ;
   }
 
     /* fill in the parameters : message_buffer */
@@ -97,7 +100,6 @@ void *ihome_monitor ( void *prm)
   }
   
   sprintf(message,http_request,private_key,input_buffer,message_buffer,output_buffer);
-
   /* create the socket */
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd < 0)

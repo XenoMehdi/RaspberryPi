@@ -93,7 +93,7 @@
 
  if ( (threads_rtn [0] || threads_rtn [1] || threads_rtn [2] || threads_rtn [3] ) == 0 )
  {
- printf("creation of threads success\n");
+ printf("Starting iHome...\n");
  }
  else 
  {
