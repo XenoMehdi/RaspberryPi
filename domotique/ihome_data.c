@@ -38,6 +38,10 @@
 /**********************/
 /* Public Data        */
 /**********************/
+// Arrays of I/O pins
+unsigned int  pins_in  [nb_Of_Input_Elements]  = {15, 16, 1, 4, 5, 6, 10, 11};
+unsigned int  pins_out [nb_Of_Output_Elements] = {21, 22, 23, 24, 25, 26, 27};
+
 // Array of input elements.
 input_object_t inputs_Array_Of_Elements [ nb_Of_Input_Elements ];
 const input_object_t input_object_cst   = { FALSE, FALSE, PTHREAD_MUTEX_INITIALIZER } ;
