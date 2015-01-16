@@ -18,5 +18,13 @@
 
 void *ihome_read ( void *prm)
 {
-
+  while(1)
+  {
+  // update GPIO outputs
+  for(l_indx=0; l_indx<nb_Of_Input_Elements; l_indx++)
+	{
+	inputs_Array_Of_Elements[l_indx].value = (digitalRead(pins_in[l_indx]) == HIGH)? TRUE : FALSE );
+	}
+    usleep(100000);
+  }
 }
