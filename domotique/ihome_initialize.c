@@ -46,6 +46,15 @@ int ihome_initialize ( void )
 // local data
 unsigned int l_indx = 0 ;
 
+// initialize the GPIO for input and output modes
+for(l_indx=0; l_indx<nb_Of_Input_Elements; l_indx++)
+{
+  pinMode(pins_in[l_indx], INPUT);
+}
+for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
+{
+  pinMode(pins_out[l_indx], OUTPUT);
+}
 // initialize the input array
 for ( l_indx = 0 ; l_indx < nb_Of_Input_Elements ; l_indx++ )
 {
