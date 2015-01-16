@@ -187,6 +187,11 @@ typedef  union {
 /**********************/
 /* Public Data        */
 /**********************/
+// Arrays of I/O pins
+extern unsigned int  pins_in  [nb_Of_Input_Elements]  ;
+extern unsigned int  pins_out [nb_Of_Output_Elements] ;
+
+
 // Array of input elements.
 extern input_object_t inputs_Array_Of_Elements [ nb_Of_Input_Elements ];
 extern const input_object_t input_object_cst;
