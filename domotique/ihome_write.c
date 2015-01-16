@@ -1,37 +1,52 @@
-/*******************************************************************************
-* Copyright FEZ EMBEDDED SYSTEMS INDUSTRY (c) 2015       All Rights Reserved   *
-********************************************************************************/
-
-/*******************************************************************************
-* PROJECT : Intelligent Home (Raspberry Pi B+)                                 *
-********************************************************************************
-*                                                                              *
-*  Module Name : ihome_write                                                   *
-*                                                                              *
-*  Description : write all outputs from array into MCU registers.              *
-*                                                                              *
-*  Written by  : E. EL FAKIR                                 Date : 07/01/2015 *
-*                                                                              *
-********************************************************************************/
+/**
+ *	description : write data output to gpio.
+ *
+ *  @Module     ihome_write
+ *	@author 	El Mehdi El Fakir
+ *	@email		elmehdi@elfakir.me
+ *	@website	--
+ *	@link		  --
+ *	@version 	v1.0
+ *	@compiler GCC
+ *  @hardware Raspberry Pi B+
+ *	@license	GNU GPL v3
+ *	
+ * |----------------------------------------------------------------------
+ * | Copyright (C) FEZ EMBEDDED SYSTEMS INDUSTRY, 2015
+ * | 
+ * | This program is free software: you can redistribute it and/or modify
+ * | it under the terms of the GNU General Public License as published by
+ * | the Free Software Foundation, either version 3 of the License, or
+ * | any later version.
+ * |  
+ * | This program is distributed in the hope that it will be useful,
+ * | but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * | GNU General Public License for more details.
+ * | 
+ * | You should have received a copy of the GNU General Public License
+ * | along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * |----------------------------------------------------------------------
+ *	
+ *	Version 1.0
+ *	 - January 16, 2015
+ *	 - first issue
+ *	
+ */
 #include <time.h>
 #include "ihome_public.h"
 #include <wiringPi.h>
 
-unsigned int  pins[8] = {15, 16, 1, 4, 5, 6, 10, 11};
 
 void *ihome_write ( void *prm)
 {
   unsigned int l_indx, activate_sleep, no_message_to_display ;
-  for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
-	{
-	pinMode(pins[l_indx], OUTPUT);
-	}
 
   while(1){
   // update GPIO outputs
   for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
 	{
-	digitalWrite(pins[l_indx], (outputs_Array_Of_Elements[l_indx].value == 1 ) ? HIGH : LOW );
+	digitalWrite(pins_out[l_indx], (outputs_Array_Of_Elements[l_indx].value == TRUE ) ? HIGH : LOW );
 	}
 
     no_message_to_display = 1 ;
