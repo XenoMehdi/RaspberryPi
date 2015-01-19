@@ -38,6 +38,7 @@
 
 #include <stdio.h>
 #include <pthread.h>
+#include <bcm2835.h>
 
 /**********************/
 /* Type Declaration   */

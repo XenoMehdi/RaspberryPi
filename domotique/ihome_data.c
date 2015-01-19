@@ -39,7 +39,7 @@
 /* Public Data        */
 /**********************/
 // Arrays of I/O pins
-unsigned int  pins_in  [nb_Of_Input_Elements]  = {15, 16, 1, 4, 5, 6, 10, 11, 12};
+unsigned int  pins_in  [nb_Of_Input_Elements]  = {15, 16,  1,  4,  5,  6, 10, 11};
 unsigned int  pins_out [nb_Of_Output_Elements] = {21, 22, 23, 24, 25, 26, 27, 28};
 
 // Array of input elements.
@@ -48,7 +48,7 @@ const input_object_t input_object_cst   = { FALSE, FALSE, PTHREAD_MUTEX_INITIALI
 
 // Array of output elements.
 output_object_t outputs_Array_Of_Elements [ nb_Of_Output_Elements ];
-const output_object_t output_object_cst = { FALSE, FALSE, PTHREAD_MUTEX_INITIALIZER } ;
+const output_object_t output_object_cst = { TRUE, FALSE, PTHREAD_MUTEX_INITIALIZER } ;
 
 // List of defined messages 
 const messages_object_t messages_list_cst [ nb_Of_Messages ] = {

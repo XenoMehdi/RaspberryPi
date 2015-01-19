@@ -35,7 +35,7 @@
  */
 #include <time.h>
 #include "ihome_public.h"
-#include <wiringPi.h>
+//#include <wiringPi.h>
 
 
 void *ihome_write ( void *prm)
@@ -46,7 +46,8 @@ void *ihome_write ( void *prm)
   // update GPIO outputs
   for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
 	{
-	digitalWrite(pins_out[l_indx], (outputs_Array_Of_Elements[l_indx].value == TRUE ) ? HIGH : LOW );
+//	digitalWrite(pins_out[l_indx], ((outputs_Array_Of_Elements[l_indx].value == TRUE ) ? HIGH : LOW ));
+	bcm2835_gpio_write(pins_out[l_indx], ((outputs_Array_Of_Elements[l_indx].value == TRUE ) ? HIGH : LOW ));
 	}
 
     no_message_to_display = 1 ;

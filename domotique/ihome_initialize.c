@@ -34,11 +34,11 @@
  */
 
 #include "ihome_public.h"
-#include <wiringPi.h>
+//#include <wiringPi.h>
 #include <lcd.h>
 
-#define TURN_PIN_ON(pin)  pinMode( pin ,   OUTPUT); digitalWrite ( pin , HIGH) ;
-#define TURN_PIN_OFF(pin) pinMode( pin ,   OUTPUT); digitalWrite ( pin , LOW)  ;
+#define TURN_PIN_ON(pin) // pinMode( pin ,   OUTPUT); digitalWrite ( pin , HIGH) ;
+#define TURN_PIN_OFF(pin)// pinMode( pin ,   OUTPUT); digitalWrite ( pin , LOW)  ;
 
 int ihome_initialize ( void )
 {
@@ -49,11 +49,15 @@ unsigned int l_indx = 0 ;
 // initialize the GPIO for input and output modes
 for(l_indx=0; l_indx<nb_Of_Input_Elements; l_indx++)
 {
-  pinMode(pins_in[l_indx], INPUT);
+//  pinMode(pins_in[l_indx], INPUT);
 }
+  bcm2835_gpio_fsel(5, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(14, BCM2835_GPIO_FSEL_INPT);
+  bcm2835_gpio_set_pud(14, BCM2835_GPIO_PUD_UP);
+
 for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
 {
-  pinMode(pins_out[l_indx], OUTPUT);
+//  pinMode(pins_out[l_indx], OUTPUT);
 }
 // initialize the input array
 for ( l_indx = 0 ; l_indx < nb_Of_Input_Elements ; l_indx++ )
@@ -110,7 +114,8 @@ software_configuration = software_configuration_default ;
 lcd_handler = 0;
 
 // initialize wiringPi library to use GPIOs
-wiringPiSetup();
+//wiringPiSetup();
+bcm2835_init();
 
 // initialize lcd driver
 lcd_handler = lcdInit( 2, 16, 4, RS, EN, D4, D5, D6, D7, D_UNUSED, D_UNUSED, D_UNUSED, D_UNUSED) ;
