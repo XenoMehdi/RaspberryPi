@@ -23,7 +23,9 @@ void *ihome_read ( void *prm)
   // update GPIO outputs
   for(l_indx=0; l_indx<nb_Of_Input_Elements; l_indx++)
 	{
+	pthread_mutex_lock( inputs_Array_Of_Elements[l_indx].mutex ) ;
 	inputs_Array_Of_Elements[l_indx].value = (digitalRead(pins_in[l_indx]) == HIGH)? TRUE : FALSE );
+	pthread_mutex_unlock( inputs_Array_Of_Elements[l_indx].mutex ) ;
 	}
     usleep(100000);
   }
