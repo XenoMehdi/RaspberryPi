@@ -35,7 +35,7 @@
  */
  #include "ihome_public.h"
  #include <sched.h>
- 
+ #include <pthread.h> 
  #define nb_Of_Threads 4
  
  pthread_t write_thread ;
@@ -65,12 +65,12 @@
  pthread_attr_init ( &read_attr ) ;
  pthread_attr_init ( &monitor_attr ) ;
  pthread_attr_init ( &update_attr ) ;
-
- pthread_attr_setinheritsched ( &write_attr, PTHREAD_EXPLICIT_SCHED ) ;
+#if 0
+ phread_attr_setinheritsched ( &write_attr, PTHREAD_EXPLICIT_SCHED ) ;
  pthread_attr_setinheritsched ( &read_attr, PTHREAD_EXPLICIT_SCHED ) ;
  pthread_attr_setinheritsched ( &monitor_attr, PTHREAD_EXPLICIT_SCHED ) ;
  pthread_attr_setinheritsched ( &update_attr, PTHREAD_EXPLICIT_SCHED ) ;
-
+#endif
  pthread_attr_setschedpolicy  ( &write_attr, SCHED_RR ) ;
  pthread_attr_setschedpolicy  ( &read_attr, SCHED_RR ) ;
  pthread_attr_setschedpolicy  ( &monitor_attr, SCHED_RR ) ;

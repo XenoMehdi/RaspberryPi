@@ -61,9 +61,9 @@ void *ihome_write ( void *prm)
     {
       if ( active_message_list[l_indx].printed_to_lcd == FALSE )
       {
-        ihome_write_lcd ( messages_list_cst[
-			active_message_list[l_indx].id_message
-			].lcd_message ) ;
+  //      ihome_write_lcd ( messages_list_cst[
+//			active_message_list[l_indx].id_message
+//			].lcd_message ) ;
         active_message_list[l_indx].printed_to_lcd = TRUE ;
 	activate_sleep = 1 ; no_message_to_display = 0 ;
       }
@@ -77,6 +77,7 @@ void *ihome_write ( void *prm)
   }
     // if no message to display, display home message
     if(no_message_to_display == 1 )
-	ihome_write_lcd ( messages_list_cst[NO_ACTIVE_MESSAGE] );
+//	ihome_write_lcd ( messages_list_cst[NO_ACTIVE_MESSAGE] )
+;
  }
 }

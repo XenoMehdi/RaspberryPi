@@ -39,7 +39,7 @@
  void ihome_write_lcd ( lcd_message_t lcd_message )
  {
   // write to each line of lcd
-  lcdClear (lcd_handler);
-  lcdPosition (lcd_handler, 0, 0) ; lcdPuts (lcd_handler, lcd_message.lcd_line_1 ) ;
-  lcdPosition (lcd_handler, 0, 1) ; lcdPuts (lcd_handler, lcd_message.lcd_line_2 ) ;
+//  lcdClear (lcd_handler);
+//  lcdPosition (lcd_handler, 0, 0) ; lcdPuts (lcd_handler, lcd_message.lcd_line_1 ) ;
+//  lcdPosition (lcd_handler, 0, 1) ; lcdPuts (lcd_handler, lcd_message.lcd_line_2 ) ;
  }

@@ -13,7 +13,7 @@ CFLAGS   = -std=c99 -Wall -I.
 
 LINKER   = gcc -o
 # linking flags here
-LFLAGS   = -Wall -I. -lpthread -lwiringPi -lwiringPiDev -lbcm2835 
+LFLAGS   = -lpthread 
 
 # change these to set the proper directories where each files shoould be
 SRCDIR   = .
