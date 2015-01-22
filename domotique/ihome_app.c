@@ -1,15 +1,14 @@
 /**
- *	activation point for iHome Software.
+ *  activation point for iHome Software.
  *
- *  @Module   ihome_app
- *	@author 	El Mehdi El Fakir
- *	@email		elmehdi@elfakir.me
- *	@website	--
- *	@link		  --
- *	@version 	v1.0
- *	@compiler GCC
- *  @hardware Raspberry Pi B+
- *	@license	GNU GPL v3
+ *  @Module     ihome_app
+ *  @author     El Mehdi El Fakir
+ *  @email      elmehdi@elfakir.me
+ *  @website    --
+ *  @link       --
+ *  @compiler   GCC
+ *  @hardware   Raspberry Pi B+
+ *  @license    GNU GPL v3
  *	
  * |----------------------------------------------------------------------
  * | Copyright (C) FEZ EMBEDDED SYSTEMS INDUSTRY, 2015
@@ -32,10 +31,14 @@
  *	 - January 08, 2015
  *	 - first issue
  *	
+ *	Version 1.1
+ *	 - January 22, 2015
+ *	 - change usage of wiringPi by bcm2835 lib
  */
  #include "ihome_public.h"
  #include <sched.h>
  #include <pthread.h> 
+ 
  #define nb_Of_Threads 4
  
  pthread_t write_thread ;
@@ -65,12 +68,12 @@
  pthread_attr_init ( &read_attr ) ;
  pthread_attr_init ( &monitor_attr ) ;
  pthread_attr_init ( &update_attr ) ;
-#if 0
- phread_attr_setinheritsched ( &write_attr, PTHREAD_EXPLICIT_SCHED ) ;
+
+ pthread_attr_setinheritsched ( &write_attr, PTHREAD_EXPLICIT_SCHED ) ;
  pthread_attr_setinheritsched ( &read_attr, PTHREAD_EXPLICIT_SCHED ) ;
  pthread_attr_setinheritsched ( &monitor_attr, PTHREAD_EXPLICIT_SCHED ) ;
  pthread_attr_setinheritsched ( &update_attr, PTHREAD_EXPLICIT_SCHED ) ;
-#endif
+
  pthread_attr_setschedpolicy  ( &write_attr, SCHED_RR ) ;
  pthread_attr_setschedpolicy  ( &read_attr, SCHED_RR ) ;
  pthread_attr_setschedpolicy  ( &monitor_attr, SCHED_RR ) ;
@@ -122,6 +125,8 @@
  pthread_attr_destroy ( &read_attr ) ;
  pthread_attr_destroy ( &monitor_attr ) ;
  pthread_attr_destroy ( &update_attr ) ;
-
+ 
+ bcm2835_close();
+  
  return 0;
  }
