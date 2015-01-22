@@ -51,18 +51,6 @@ typedef unsigned char boolean_t;
 #define nb_OF_ACTIVE_MESSAGES 7
 #define nb_Of_Config_Elements 1
 
-// LCD Pins
-#define RS 3
-#define EN 2
-
-#define D4 0
-#define D5 7
-#define D6 9
-#define D7 8
-#define D_UNUSED 0
-
-#define LCD_POWER_ON  6
-#define LCD_BACKLIGHT 14
 
 // define the structure of input object
 typedef struct {
@@ -189,9 +177,12 @@ typedef  union {
 /* Public Data        */
 /**********************/
 // Arrays of I/O pins
+extern unsigned int  lcd_pins [] ;
 extern unsigned int  pins_in  [nb_Of_Input_Elements]  ;
 extern unsigned int  pins_out [nb_Of_Output_Elements] ;
 
+// lcd handler
+extern int lcd_handler;
 
 // Array of input elements.
 extern input_object_t inputs_Array_Of_Elements [ nb_Of_Input_Elements ];
