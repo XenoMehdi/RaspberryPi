@@ -1,15 +1,14 @@
 /**
  *  declaration of all Software's datas.
  *
- *  @Module   ihome_data
- *  @author   El Mehdi El Fakir
- *  @email	  elmehdi@elfakir.me
- *  @website  --
- *  @link		  --
- *  @version  v1.0
- *  @compiler GCC
- *  @hardware Raspberry Pi B+
- *  @license  GNU GPL v3
+ *  @Module		ihome_data
+ *  @author		El Mehdi El Fakir
+ *  @email		elmehdi@elfakir.me
+ *  @website	--
+ *  @link		--
+ *  @compiler	GCC
+ *  @hardware	Raspberry Pi B+
+ *  @license	GNU GPL v3
  *	
  * |----------------------------------------------------------------------
  * | Copyright (C) FEZ EMBEDDED SYSTEMS INDUSTRY, 2015
@@ -39,6 +38,7 @@
 /* Public Data        */
 /**********************/
 // Arrays of I/O pins
+unsigned int  lcd_pins [7] = { 3, 2, 0, 7, 9, 8, 14} ; // RS, E, D4,D5, D6, D7, Backlight
 unsigned int  pins_in  [nb_Of_Input_Elements]  = {14, 15, 18, 23, 24, 25,  8, 7};
 unsigned int  pins_out [nb_Of_Output_Elements] = { 5,  6, 13, 19, 26, 12, 16, 20};
 
@@ -53,13 +53,16 @@ const output_object_t output_object_cst = { FALSE, FALSE, PTHREAD_MUTEX_INITIALI
 // List of defined messages 
 const messages_object_t messages_list_cst [ nb_Of_Messages ] = {
                 {{"     iHome","    Running"}, {"iHome+is+running"} },
-		{{"    WELCOME",""}, {"Welcome"} },
-		{{" COPYRIGHT 2015","     F.E.S.I"}, {"Copyright+2015+F.E.S.I"} },
+				{{"    WELCOME",""}, {"Welcome"} },
+				{{" COPYRIGHT 2015","     F.E.S.I"}, {"Copyright+2015+F.E.S.I"} },
                 {{"","LCD INIT FAILED"}, {"LCD+Initialization+failed"} },
                 {{"","LCD INIT SUCCESS"}, {"LCD+Initialization+success"} },
                 {{" SOFTWARE INIT","  SUCCESSFULLY"}, {"Initialization+of+Software+data+success"} },
                 {{"SEND DATA TO","phant.io FAIL"}, {""} }
 };
+
+// lcd handler
+int lcd_handler = 0;
 
 // list of active messages to send to server and to print on LCD
 active_message_t active_message_list [ nb_OF_ACTIVE_MESSAGES] ;
@@ -71,15 +74,12 @@ sw_configuration_t software_configuration ;
 // default software configuration
 const sw_configuration_t software_configuration_default = {3} ; // set lcd and backlight on
 
-// LCD driver handler
-int  lcd_handler ;
-
 // initialize context pile with the first input, output and confiduration in the array : to be updated
 config_object_t config_Array_Of_Elements [ nb_Of_Config_Elements ];
 context_object_t context_pile = { 
 					&inputs_Array_Of_Elements[0],
-			                &outputs_Array_Of_Elements[0],
-			                &config_Array_Of_Elements[0],
-			                NULL,
-			                NULL };
+					&outputs_Array_Of_Elements[0],
+					&config_Array_Of_Elements[0],
+					NULL,
+					NULL };
 
