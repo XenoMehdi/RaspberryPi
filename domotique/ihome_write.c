@@ -35,7 +35,7 @@
  */
 #include <time.h>
 #include "ihome_public.h"
-//#include <wiringPi.h>
+#include "ihome_lcd.h"
 
 
 void *ihome_write ( void *prm)
@@ -46,7 +46,6 @@ void *ihome_write ( void *prm)
   // update GPIO outputs
   for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
 	{
-//	digitalWrite(pins_out[l_indx], ((outputs_Array_Of_Elements[l_indx].value == TRUE ) ? HIGH : LOW ));
 	bcm2835_gpio_write(pins_out[l_indx], ((outputs_Array_Of_Elements[l_indx].value == TRUE ) ? HIGH : LOW ));
 	}
 
@@ -61,9 +60,9 @@ void *ihome_write ( void *prm)
     {
       if ( active_message_list[l_indx].printed_to_lcd == FALSE )
       {
-  //      ihome_write_lcd ( messages_list_cst[
-//			active_message_list[l_indx].id_message
-//			].lcd_message ) ;
+        ihome_lcd_write ( messages_list_cst[
+			active_message_list[l_indx].id_message
+			].lcd_message ) ;
         active_message_list[l_indx].printed_to_lcd = TRUE ;
 	activate_sleep = 1 ; no_message_to_display = 0 ;
       }
@@ -77,7 +76,7 @@ void *ihome_write ( void *prm)
   }
     // if no message to display, display home message
     if(no_message_to_display == 1 )
-//	ihome_write_lcd ( messages_list_cst[NO_ACTIVE_MESSAGE] )
+	ihome_lcd_write ( messages_list_cst[NO_ACTIVE_MESSAGE] )
 ;
  }
 }
