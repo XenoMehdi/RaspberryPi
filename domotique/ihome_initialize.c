@@ -34,11 +34,6 @@
  */
 
 #include "ihome_public.h"
-//#include <wiringPi.h>
-//#include <lcd.h>
-
-#define TURN_PIN_ON(pin) // pinMode( pin ,   OUTPUT); digitalWrite ( pin , HIGH) ;
-#define TURN_PIN_OFF(pin)// pinMode( pin ,   OUTPUT); digitalWrite ( pin , LOW)  ;
 
 int ihome_initialize ( void )
 {
@@ -51,12 +46,10 @@ bcm2835_init();
 for(l_indx=0; l_indx<nb_Of_Input_Elements; l_indx++)
 {
   bcm2835_gpio_fsel(pins_in[l_indx], BCM2835_GPIO_FSEL_INPT);
-//  pinMode(pins_in[l_indx], INPUT);
 }
 
 for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
 {
-//  pinMode(pins_out[l_indx], OUTPUT);
   bcm2835_gpio_fsel(pins_out[l_indx], BCM2835_GPIO_FSEL_OUTP);
   bcm2835_gpio_set_pud(pins_out[l_indx], BCM2835_GPIO_PUD_UP);
 }
@@ -111,36 +104,11 @@ for ( l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
 // initialize software configuration
 software_configuration = software_configuration_default ;
 
-// initialize LCD driver handler
-lcd_handler = -1;
-
-// initialize wiringPi library to use GPIOs
-//wiringPiSetup();
 
 // initialize lcd driver
-//lcd_handler = lcdInit( 2, 16, 4, RS, EN, D4, D5, D6, D7, D_UNUSED, D_UNUSED, D_UNUSED, D_UNUSED) ;
+lcd_handler = ihome_lcd_initialize(lcd_pins);
 
-//turn LCD power and backlight ON or OFF
-if (software_configuration.options.turn_LCD_Power == ON)
-{
-  TURN_PIN_ON(LCD_POWER_ON)
-}
-else
-{
-  TURN_PIN_OFF(LCD_POWER_ON)
-}
 
-if (software_configuration.options.turn_LCD_Backlight == ON)
-{
-  TURN_PIN_ON(LCD_BACKLIGHT)
-}
-else
-{
-  TURN_PIN_OFF(LCD_BACKLIGHT)
-}
-
-//	lcdHome (lcd_handler);
-//	lcdClear (lcd_handler);
 
 if(lcd_handler == -1 )
 {
@@ -165,7 +133,5 @@ else
     }
   }
 }
-
-
   return 0 ;
 }
