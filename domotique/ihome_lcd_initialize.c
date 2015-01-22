@@ -38,11 +38,11 @@
  #include "ihome_public.h"
  #include <bcm2835.h>
  
- #define lcd_Write_4bits_M(cmd)     bcm2835_gpio_write(lcd_pins[2], (cmd & 0x01 != 0) ? HIGH : LOW); \
-                                  bcm2835_gpio_write(lcd_pins[3], (cmd & 0x02 != 0) ? HIGH : LOW); \
-                                  bcm2835_gpio_write(lcd_pins[4], (cmd & 0x04 != 0) ? HIGH : LOW); \
-                                  bcm2835_gpio_write(lcd_pins[5], (cmd & 0x08 != 0) ? HIGH : LOW); \ 
-                                  bcm2835_gpio_write(lcd_pins[1], HIGH); \
+ #define lcd_Write_4bits_M(cmd)   bcm2835_gpio_write(lcd_pins[2], ((cmd & 0x01) != 0) ? HIGH : LOW); \
+                                  bcm2835_gpio_write(lcd_pins[3], ((cmd & 0x02) != 0) ? HIGH : LOW); \
+                                  bcm2835_gpio_write(lcd_pins[4], ((cmd & 0x04) != 0) ? HIGH : LOW); \
+                                  bcm2835_gpio_write(lcd_pins[5], ((cmd & 0x08) != 0) ? HIGH : LOW); \
+                                  bcm2835_gpio_write(lcd_pins[1], HIGH); delayMicroseconds(400);\
                                   bcm2835_gpio_write(lcd_pins[1], LOW);
  
  #define lcd_Write_M(cmd)         lcd_Write_4bits_M( (cmd & 0xf0) >> 4 ); lcd_Write_4bits_M( (cmd & 0x0f) ); delayMicroseconds(400);
@@ -53,8 +53,8 @@
   for(int l_indx=0; l_indx<7; l_indx++)
   {
   bcm2835_gpio_fsel(pins[l_indx], BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_set_pud(pins[l_indx], BCM2835_GPIO_PUD_UP);
-  }
+  bcm2835_gpio_set_pud(pins[l_indx], BCM2835_GPIO_PUD_OFF);
+ }
   
   //turn LCD power and backlight ON or OFF
   if (software_configuration.options.turn_LCD_Backlight == ON)
@@ -69,7 +69,7 @@
   // lcd initialization - Reset phase
   bcm2835_gpio_write(lcd_pins[0], LOW); // Set RS to 0 for command
   lcd_Write_4bits_M ( 0x03 );             // Send 0x03 for 15ms
-  delay(15);
+  delay(20);
   lcd_Write_4bits_M ( 0x03 );             // Send 0x03 for 1ms
   delay(1);
   lcd_Write_4bits_M ( 0x03 );             // Send 0x03 for 1ms

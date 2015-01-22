@@ -47,6 +47,7 @@ void *ihome_write ( void *prm)
   for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
 	{
 	bcm2835_gpio_write(pins_out[l_indx], ((outputs_Array_Of_Elements[l_indx].value == TRUE ) ? HIGH : LOW ));
+	printf("%d\n",outputs_Array_Of_Elements[l_indx].value);
 	}
 
     no_message_to_display = 1 ;
@@ -76,7 +77,6 @@ void *ihome_write ( void *prm)
   }
     // if no message to display, display home message
     if(no_message_to_display == 1 )
-	ihome_lcd_write ( messages_list_cst[NO_ACTIVE_MESSAGE] )
-;
+	ihome_lcd_write ( messages_list_cst[NO_ACTIVE_MESSAGE].lcd_message );
  }
 }

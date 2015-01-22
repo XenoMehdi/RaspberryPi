@@ -35,7 +35,8 @@
  */
  #ifndef IHOME_LCD_H
  #define IHOME_LCD_H
- 
+ #include "ihome_public.h"
+
  extern int  ihome_lcd_initialize (const unsigned int *pins) ;
  extern void ihome_lcd_write (lcd_message_t lcd_message) ;
  

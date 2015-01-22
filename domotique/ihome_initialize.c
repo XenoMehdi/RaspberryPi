@@ -34,6 +34,7 @@
  */
 
 #include "ihome_public.h"
+#include "ihome_lcd.h"
 
 int ihome_initialize ( void )
 {
@@ -46,12 +47,13 @@ bcm2835_init();
 for(l_indx=0; l_indx<nb_Of_Input_Elements; l_indx++)
 {
   bcm2835_gpio_fsel(pins_in[l_indx], BCM2835_GPIO_FSEL_INPT);
+  bcm2835_gpio_set_pud(pins_in[l_indx], BCM2835_GPIO_PUD_DOWN);
 }
 
 for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
 {
   bcm2835_gpio_fsel(pins_out[l_indx], BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_set_pud(pins_out[l_indx], BCM2835_GPIO_PUD_UP);
+  bcm2835_gpio_set_pud(pins_out[l_indx], BCM2835_GPIO_PUD_DOWN);
 }
 // initialize the input array
 for ( l_indx = 0 ; l_indx < nb_Of_Input_Elements ; l_indx++ )

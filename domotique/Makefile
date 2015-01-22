@@ -13,7 +13,7 @@ CFLAGS   = -std=c99 -Wall -I.
 
 LINKER   = gcc -o
 # linking flags here
-LFLAGS   = -lpthread 
+LFLAGS   = -lpthread -lbcm2835
 
 # change these to set the proper directories where each files shoould be
 SRCDIR   = .
@@ -27,7 +27,7 @@ rm       = rm -f
 
 
 $(BINDIR)/$(TARGET): $(OBJECTS)
-	@$(LINKER) $@ $(LFLAGS) $(OBJECTS)
+	@$(LINKER) $@ $(OBJECTS) $(LFLAGS)
 	@echo "Linking complete!"
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c

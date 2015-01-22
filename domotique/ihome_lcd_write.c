@@ -35,42 +35,40 @@
  */
  #include "ihome_lcd.h"
   
- #define lcd_Write_4bits_M(cmd)     bcm2835_gpio_write(lcd_pins[2], (cmd & 0x01 != 0) ? HIGH : LOW); \
-                                    bcm2835_gpio_write(lcd_pins[3], (cmd & 0x02 != 0) ? HIGH : LOW); \
-                                    bcm2835_gpio_write(lcd_pins[4], (cmd & 0x04 != 0) ? HIGH : LOW); \
-                                    bcm2835_gpio_write(lcd_pins[5], (cmd & 0x08 != 0) ? HIGH : LOW); \ 
+ #define lcd_Write_4bits_M(cmd)     bcm2835_gpio_write(lcd_pins[2], ((cmd & 0x01) != 0) ? HIGH : LOW); \
+                                    bcm2835_gpio_write(lcd_pins[3], ((cmd & 0x02) != 0) ? HIGH : LOW); \
+                                    bcm2835_gpio_write(lcd_pins[4], ((cmd & 0x04) != 0) ? HIGH : LOW); \
+                                    bcm2835_gpio_write(lcd_pins[5], ((cmd & 0x08) != 0) ? HIGH : LOW); \
                                     bcm2835_gpio_write(lcd_pins[1], HIGH); \
                                     bcm2835_gpio_write(lcd_pins[1], LOW);
  
- #define lcd_Write_M(cmd)   bcm2835_gpio_write(lcd_pins[0], HIGH); \
+ #define lcd_Write_M(cmd,rs)   bcm2835_gpio_write(lcd_pins[0], rs); \
+                            delayMicroseconds(400);	\
                             lcd_Write_4bits_M( (cmd & 0xf0) >> 4 ); \
                             lcd_Write_4bits_M( (cmd & 0x0f) ); \
                             delayMicroseconds(400);
  
- #define lcd_clear_M()      bcm2835_gpio_write(lcd_pins[0], LOW);  \
-                            lcd_Write_4bits_M( 0x01 );
+ #define lcd_clear_M()      	   lcd_Write_M(0x01, LOW);
+
+ #define lcd_home_M()       	   lcd_Write_M(0x02, LOW);
  
- #define lcd_move_first_line _M()   bcm2835_gpio_write(lcd_pins[0], LOW); \
-                                    lcd_Write_4bits_M( 0x80 );
+ #define lcd_move_first_line_M()   lcd_Write_M(0x80, LOW);
  
- #define lcd_move_second_line _M()  bcm2835_gpio_write(lcd_pins[0], LOW); \
-                                    lcd_Write_4bits_M( 0xc0);    
+ #define lcd_move_second_line_M()  lcd_Write_M(0xc0, LOW);
+
  void ihome_lcd_write ( lcd_message_t lcd_message )
  {
   lcd_clear_M ()
-
-// move to first line and write first message
-lcd_move_first_line _M()
-do{
-     lcd_Write_M(lcd_message.lcd_line_1[l_indx])
- }
- while(lcd_message.lcd_line_1[++l_indx] != '\0');
+  lcd_home_M ()
+ int l_indx = 0;
+ // move to first line and write first message
+ lcd_move_first_line_M()
+ for(l_indx = 0 ; l_indx<17 ; l_indx++)
+   {  lcd_Write_M( (lcd_message.lcd_line_1[l_indx] != '\0' ) ? lcd_message.lcd_line_1[l_indx] : ' ', HIGH)}
 
  // move to second line and write second message
- lcd_move_second_line _M()
- do{
-    lcd_Write_M(lcd_message.lcd_line_2[l_indx])
- }
- while(lcd_message.lcd_line_1[++l_indx] != '\0');
- 
+ lcd_move_second_line_M()
+ for(l_indx = 0 ; l_indx<17 ; l_indx++)
+   {  lcd_Write_M( (lcd_message.lcd_line_2[l_indx] != '\0' ) ? lcd_message.lcd_line_2[l_indx] : ' ', HIGH)}
+
  }
