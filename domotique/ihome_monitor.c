@@ -46,8 +46,9 @@
 /* server configuration */
 int   port =    80;
 char *host =    "data.sparkfun.com";
-char *http_request = 
-"POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s HTTP/1.1\n\n";
+char *http_post_request = 
+"POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s&cmd_buffer=rpi_cmd: HTTP/1.1\n\n";
+char *http_get_request = " GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?ne[cmd_buffer]=rpi_cmd: HTTP/1.1\n\n" ;
 
 /* socket data */ 
 struct hostent *server;
@@ -99,7 +100,7 @@ void *ihome_monitor ( void *prm)
   	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message  );
   }
   
-  sprintf(message,http_request,private_key,input_buffer,message_buffer,output_buffer);
+  sprintf(message,http_post_request,private_key,input_buffer,message_buffer,output_buffer);
   /* create the socket */
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd < 0)
