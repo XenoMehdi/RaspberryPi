@@ -14,22 +14,33 @@
 *                                                                              *
 *********************************************************************************/
 #include <time.h>
-#include <wiringPi.h>
 #include "ihome_public.h"
+
 
 void *ihome_read ( void *prm)
 {
-int l_indx;
-  while(1)
+
+/* socket data */ 
+
+int bytes, sent, received, total, l_indx;
+
+/* sent and received messages */
+char message[1024],response[500], *e1, *e2;
+
+
+while(1)
   {
   // update GPIO outputs
   for(l_indx=0; l_indx<nb_Of_Input_Elements; l_indx++)
 	{
 	pthread_mutex_lock( &inputs_Array_Of_Elements[l_indx].mutex ) ;
-//	inputs_Array_Of_Elements[l_indx].value = (digitalRead(pins_in[l_indx]) == HIGH)? TRUE : FALSE ;
 	inputs_Array_Of_Elements[l_indx].value = (bcm2835_gpio_lev(pins_in[l_indx]) == HIGH)? TRUE : FALSE ;
 	pthread_mutex_unlock( &inputs_Array_Of_Elements[l_indx].mutex ) ;
 	}
+
+  // update command inputs array from web server
+  
+  
     usleep(100000);
   }
 }
