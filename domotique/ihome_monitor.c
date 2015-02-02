@@ -43,17 +43,9 @@
 #include <netdb.h> /* struct hostent, gethostbyname */
 
 
-/* server configuration */
-int   port =    80;
-char *host =    "data.sparkfun.com";
-char *http_post_request = 
-"POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s&cmd_buffer=rpi_cmd: HTTP/1.1\n\n";
-char *http_get_request = " GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?ne[cmd_buffer]=rpi_cmd: HTTP/1.1\n\n" ;
 
-/* socket data */ 
-struct hostent *server;
-struct sockaddr_in serv_addr;
-int sockfd, bytes, sent, received, total, l_indx;
+
+int bytes, sent, received, total, l_indx;
 
 /* sent and received messages */
 char message[1024],response[500], *e1, *e2;
@@ -101,32 +93,7 @@ void *ihome_monitor ( void *prm)
   }
   
   sprintf(message,http_post_request,private_key,input_buffer,message_buffer,output_buffer);
-  /* create the socket */
-  sockfd = socket(AF_INET, SOCK_STREAM, 0);
-  if (sockfd < 0)
-  {
-  	perror("ERROR opening socket");
-  	exit(0);
-  }
-
-  /* lookup the ip address */
-  server = gethostbyname(host);
-  if (server == NULL)
-  {
-  	perror("ERROR, no such host");
-  	exit(0);
-  }
-
-  /* fill in the structure */
-  memset(&serv_addr,0,sizeof(serv_addr));
-  serv_addr.sin_family = AF_INET;
-  serv_addr.sin_port = htons(port);
-  memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
-
-  /* connect the socket */
-  if (connect(sockfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
-      error("ERROR connecting");
-
+  
   /* send the request */
   total = strlen(message);
   sent = 0;
@@ -164,8 +131,6 @@ void *ihome_monitor ( void *prm)
   	exit(0);
   }
 
-  /* close the socket */
-  close(sockfd);
 
  /* process response */
  e1 = strstr(response, "\r\n\r\n");
