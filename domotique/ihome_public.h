@@ -40,6 +40,13 @@
 #include <pthread.h>
 #include <bcm2835.h>
 
+#include <stdio.h> /* printf, sprintf */
+#include <stdlib.h> /* read, write, close */
+#include <string.h> /* memcpy, memset */
+#include <sys/socket.h> /* socket, connect */
+#include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
+#include <netdb.h> /* struct hostent, gethostbyname */
+
 /**********************/
 /* Type Declaration   */
 /**********************/
@@ -70,6 +77,18 @@ typedef enum {
   input_8,
   nb_Of_Input_Elements
 } input_element_t ;
+
+typedef enum {
+  command_1,
+  command_2,
+  command_3,
+  command_4,
+  command_5,
+  command_6,
+  command_7,
+  command_8,
+  nb_Of_Command_Elements
+} command_element_t ;
 
 // define the structure of output object
 typedef struct {
@@ -186,6 +205,7 @@ extern int lcd_handler;
 
 // Array of input elements.
 extern input_object_t inputs_Array_Of_Elements [ nb_Of_Input_Elements ];
+extern input_object_t commands_Array_Of_Elements [ nb_Of_Command_Elements ];
 extern const input_object_t input_object_cst;
 
 // Array of output elements.
@@ -222,4 +242,13 @@ extern void *ihome_read       ( void *prm) ;
 extern void *ihome_update     ( void *prm) ;
 extern void *ihome_write      ( void *prm) ;
 
+
+/* Socket data */
+extern int   port ;
+extern char *host ;
+extern char *http_post_request ;
+extern char *http_get_request ;
+extern struct hostent *server;
+extern struct sockaddr_in serv_addr;
+extern int   sockfd ;
 #endif
