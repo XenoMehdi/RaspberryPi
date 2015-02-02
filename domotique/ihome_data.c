@@ -39,11 +39,12 @@
 /**********************/
 // Arrays of I/O pins
 unsigned int  lcd_pins [7] = { 22, 27, 17, 4, 3, 2, 10} ; // RS, E, D4,D5, D6, D7, Backlight
-unsigned int  pins_in  [nb_Of_Input_Elements]  = { 14, 15, 18, 23, 24, 25,  8, 7};
+unsigned int  pins_in  [nb_Of_Input_Elements]  = { 9, 11, 18, 23, 24, 25,  8,  7};
 unsigned int  pins_out [nb_Of_Output_Elements] = { 5,  6, 13, 19, 26, 12, 16, 20};
 
 // Array of input elements.
 input_object_t inputs_Array_Of_Elements [ nb_Of_Input_Elements ];
+input_object_t commands_Array_Of_Elements [ nb_Of_Command_Elements ];
 const input_object_t input_object_cst   = { FALSE, FALSE, PTHREAD_MUTEX_INITIALIZER } ;
 
 // Array of output elements.
@@ -83,3 +84,12 @@ context_object_t context_pile = {
 					NULL,
 					NULL };
 
+/* server configuration */
+int   port =    80;
+char *host =    "data.sparkfun.com";
+char *http_post_request = 
+"POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s&cmd_buffer=rpi_cmd: HTTP/1.1\n\n";
+char *http_get_request = " GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?ne[cmd_buffer]=rpi_cmd: HTTP/1.1\n\n" ;
+struct hostent *server;
+struct sockaddr_in serv_addr;
+int   sockfd ;
