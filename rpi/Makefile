@@ -9,7 +9,7 @@ TARGET   = iHome_Start
 
 CC       = gcc
 # compiling flags here
-CFLAGS   = -std=c99 -Wall -I.
+CFLAGS   = -std=c99 -Wall -I$(INCDIR)
 
 LINKER   = gcc -o
 # linking flags here
@@ -17,11 +17,12 @@ LFLAGS   = -lpthread -lbcm2835
 
 # change these to set the proper directories where each files shoould be
 SRCDIR   = ./sources
+INCDIR   = ./includes
 OBJDIR   = ./objects
 BINDIR   = ./bin
 
 SOURCES  := $(wildcard $(SRCDIR)/*.c)
-INCLUDES := $(wildcard $(SRCDIR)/*.h)
+INCLUDES := $(wildcard $(INCDIR)/*.h)
 OBJECTS  := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 rm       = rm -f
 

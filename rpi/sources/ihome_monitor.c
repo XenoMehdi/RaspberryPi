@@ -35,15 +35,7 @@
 
 #include "ihome_public.h"
 
-#include <stdio.h> /* printf, sprintf */
-#include <stdlib.h> /* read, write, close */
-#include <string.h> /* memcpy, memset */
-#include <sys/socket.h> /* socket, connect */
-#include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
-#include <netdb.h> /* struct hostent, gethostbyname */
-
-
-
+#define print_error(x)	printf("ERROR writing message to socket"); exit(x);
 
 int bytes, sent, received, total, l_indx;
 
@@ -93,7 +85,7 @@ void *ihome_monitor ( void *prm)
   }
   
   sprintf(message,http_post_request,private_key,input_buffer,message_buffer,output_buffer);
-  
+
   /* send the request */
   total = strlen(message);
   sent = 0;
@@ -101,8 +93,7 @@ void *ihome_monitor ( void *prm)
       bytes = write(sockfd,message+sent,total-sent);
       if (bytes < 0)
       {
-          perror("ERROR writing message to socket");
-          exit(0);
+	print_error(0);
       }
       if (bytes == 0)
           break;
@@ -117,8 +108,7 @@ void *ihome_monitor ( void *prm)
       bytes = read(sockfd,response-received,total-received);
       if (bytes < 0)
       {
-          perror("ERROR reading response from socket");
-          exit(0);
+	print_error(0);
       }
       if (bytes == 0)
           break;
@@ -127,8 +117,7 @@ void *ihome_monitor ( void *prm)
 
   if (received == total)
   {
-  	perror("ERROR storing complete response from socket");
-  	exit(0);
+  	print_error(0);
   }
 
 
@@ -167,6 +156,7 @@ void *ihome_monitor ( void *prm)
 			}
 		}
   }
+
  }
  sleep(10);
   }

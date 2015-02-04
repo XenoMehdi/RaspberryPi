@@ -47,7 +47,7 @@ void *ihome_write ( void *prm)
   for(l_indx=0; l_indx<nb_Of_Output_Elements; l_indx++)
 	{
 	bcm2835_gpio_write(pins_out[l_indx], ((outputs_Array_Of_Elements[l_indx].value == TRUE ) ? HIGH : LOW ));
-	printf("%d\n",outputs_Array_Of_Elements[l_indx].value);
+	//printf("%d\n",outputs_Array_Of_Elements[l_indx].value);
 	}
 
     no_message_to_display = 1 ;

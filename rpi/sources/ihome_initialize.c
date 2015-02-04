@@ -109,7 +109,6 @@ for ( l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
 // initialize software configuration
 software_configuration = software_configuration_default ;
 
-
 // initialize lcd driver
 lcd_handler = ihome_lcd_initialize(lcd_pins);
 
@@ -143,7 +142,7 @@ else
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd < 0)
   {
-  	perror("ERROR opening socket");
+  	printf("ERROR opening socket");
   	exit(0);
   }
 
@@ -151,7 +150,7 @@ else
   server = gethostbyname(host);
   if (server == NULL)
   {
-  	perror("ERROR, no such host");
+  	printf("ERROR, no such host");
   	exit(0);
   }
 
@@ -163,7 +162,7 @@ else
 
   /* connect the socket */
   if (connect(sockfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
-      error("ERROR connecting");
+      printf("ERROR connecting");
 
   return 0 ;
 }
