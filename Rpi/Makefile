@@ -16,9 +16,9 @@ LINKER   = gcc -o
 LFLAGS   = -lpthread -lbcm2835
 
 # change these to set the proper directories where each files shoould be
-SRCDIR   = .
-OBJDIR   = .
-BINDIR   = .
+SRCDIR   = ./sources
+OBJDIR   = ./objects
+BINDIR   = ./bin
 
 SOURCES  := $(wildcard $(SRCDIR)/*.c)
 INCLUDES := $(wildcard $(SRCDIR)/*.h)
