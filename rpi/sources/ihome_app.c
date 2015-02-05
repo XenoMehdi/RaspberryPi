@@ -63,7 +63,8 @@
  int l_indx ;
 
  ihome_init_status = ihome_initialize () ;
-
+ printf("init... [%d]", ihome_init_status) ;
+ 
  pthread_attr_init ( &write_attr ) ;
  pthread_attr_init ( &read_attr ) ;
  pthread_attr_init ( &monitor_attr ) ;
@@ -96,7 +97,7 @@
 
  if ( (threads_rtn [0] || threads_rtn [1] || threads_rtn [2] || threads_rtn [3] ) == 0 )
  {
- printf("Starting iHome...\n");
+ printf("Starting iHome threads...\n");
  }
  else 
  {
