@@ -250,5 +250,6 @@ extern char *http_post_request ;
 extern char *http_get_request ;
 extern struct hostent *server;
 extern struct sockaddr_in serv_addr;
-extern int   sockfd ;
+extern int   socket_monitor ;
+extern int   socket_read ;
 #endif
