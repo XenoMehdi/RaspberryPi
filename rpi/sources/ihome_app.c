@@ -126,8 +126,10 @@
  pthread_attr_destroy ( &monitor_attr ) ;
  pthread_attr_destroy ( &update_attr ) ;
  
- /* close the socket */
- close(sockfd);
+ /* close the created sockets */
+ close(socket_monitor);
+ close(socket_read);
+
  /* close bcm2835 drivers */
  bcm2835_close();
   
