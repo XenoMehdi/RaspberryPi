@@ -40,6 +40,7 @@ int ihome_initialize ( void )
 {
 
 // local data
+unsigned char l_return = 0;
 unsigned int l_indx = 0 ;
 bcm2835_init();
 
@@ -124,7 +125,7 @@ if(lcd_handler == -1 )
       l_indx = nb_OF_ACTIVE_MESSAGES ;
     }
   }
-  return -1;
+  l_return |= LCD_INIT_FAIL ;
 }
 else 
 {
@@ -138,21 +139,17 @@ else
   }
 }
 
-/* create the socket */
-  sockfd = socket(AF_INET, SOCK_STREAM, 0);
-  if (sockfd < 0)
-  {
-  	printf("ERROR opening socket");
-  	exit(0);
-  }
+  /* create the socket */
+  socket_monitor  = socket(AF_INET, SOCK_STREAM, 0);
+  socket_read     = socket(AF_INET, SOCK_STREAM, 0);
+  
+  if (socket_monitor < 0 || socket_read < 0)
+  l_return |= ERR_OPEN_SOCKET;
 
   /* lookup the ip address */
   server = gethostbyname(host);
   if (server == NULL)
-  {
-  	printf("ERROR, no such host");
-  	exit(0);
-  }
+  l_return |= ERR_OPEN_HOST;
 
   /* fill in the structure */
   memset(&serv_addr,0,sizeof(serv_addr));
@@ -161,8 +158,11 @@ else
   memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
 
   /* connect the socket */
-  if (connect(sockfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
-      printf("ERROR connecting");
+  if ( connect(socket_monitor, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+  l_return |= ERR_CONNECT_SOCKET;
+  
+  if (connect(socket_read, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+  l_return |= ERR_CONNECT_SOCKET;
 
-  return 0 ;
+  return l_return ;
 }
