@@ -92,4 +92,5 @@ char *http_post_request =
 char *http_get_request = " GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?ne[cmd_buffer]=rpi_cmd: HTTP/1.1\n\n" ;
 struct hostent *server;
 struct sockaddr_in serv_addr;
-int   sockfd ;
+int   socket_monitor ;
+int   socket_read ;
