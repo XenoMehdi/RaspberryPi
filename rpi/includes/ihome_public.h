@@ -58,6 +58,10 @@ typedef unsigned char boolean_t;
 #define nb_OF_ACTIVE_MESSAGES 7
 #define nb_Of_Config_Elements 1
 
+#define ERR_CONNECT_SOCKET  0x01
+#define ERR_OPEN_HOST       0x02
+#define ERR_OPEN_SOCKET     0x04
+#define LCD_INIT_FAIL       0x08
 
 // define the structure of input object
 typedef struct {
