@@ -36,6 +36,7 @@
  *	 - change usage of wiringPi by bcm2835 lib
  */
  #include "ihome_public.h"
+ #include <unistd.h>
  #include <sched.h>
  #include <pthread.h> 
  
@@ -63,7 +64,7 @@
  int l_indx ;
 
  ihome_init_status = ihome_initialize () ;
- printf("init... [%d]", ihome_init_status) ;
+ //printf("init... [%d]\n", ihome_init_status) ;
  
  pthread_attr_init ( &write_attr ) ;
  pthread_attr_init ( &read_attr ) ;
@@ -128,7 +129,7 @@
  pthread_attr_destroy ( &update_attr ) ;
  
  /* close the created sockets */
- close(socket_monitor);
+ //close(socket_monitor);
  close(socket_read);
 
  /* close bcm2835 drivers */

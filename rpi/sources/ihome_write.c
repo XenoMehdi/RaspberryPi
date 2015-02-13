@@ -33,7 +33,10 @@
  *	 - first issue
  *	
  */
-#include <time.h>
+// avoid implicit declaration of nanosleep
+#define _POSIX_C_SOURCE	199309L
+
+#include <sys/time.h>
 #include "ihome_public.h"
 #include "ihome_lcd.h"
 
@@ -71,9 +74,9 @@ void *ihome_write ( void *prm)
     pthread_mutex_unlock(&active_message_list[l_indx].mutex);
 
     if(activate_sleep == 1 ) 
-	usleep(2000000) ;
+	nanosleep((struct timespec[]){{2, 0}}, NULL);
     else
-	usleep(100000) ;
+	nanosleep((struct timespec[]){{1, 0}}, NULL);
   }
     // if no message to display, display home message
     if(no_message_to_display == 1 )

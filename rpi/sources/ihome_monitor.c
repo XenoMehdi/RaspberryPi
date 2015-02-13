@@ -33,9 +33,14 @@
  *	 - first issue
  */
 
+// avoid implicit declaration of nanosleep
+#define _POSIX_C_SOURCE 199309L
+
+#include <unistd.h>
+#include <sys/time.h>
 #include "ihome_public.h"
 
-#define print_error(x)	printf("ERROR writing message to socket"); exit(x);
+#define print_error(x,s)	printf("ERROR writing message to socket {%s}\n",s); exit(x);
 
 int bytes, sent, received, total, l_indx;
 
@@ -51,9 +56,13 @@ char message_buffer [ 57*nb_OF_ACTIVE_MESSAGES - 2 ]; // 55 char per message + 2
 void *ihome_monitor ( void *prm)
 {
 
-  int l_indx ;
-  usleep(2000000);
+  int l_indx,sock ;
+  nanosleep((struct timespec[]){{2, 0}}, NULL);
 
+  /* connect the socket */
+/*  if ( connect(socket_monitor, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+	{print_error(0,"connection")}
+*/
   while(1){
   /* fill in the parameters : input_buffer */
   memset(input_buffer, ':', sizeof(input_buffer));
@@ -68,6 +77,21 @@ void *ihome_monitor ( void *prm)
   {
 	*(output_buffer + l_indx*2) = outputs_Array_Of_Elements[l_indx].value +48 ;
   }
+     /* create the socket */
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    server = gethostbyname(host);
+
+    memset(&serv_addr,0,sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(port);
+    memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
+    memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
+ 
+     /* connect the socket */
+     if (connect(sock,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
+     /* close the socket */
+     close(sock);
+
 
     /* fill in the parameters : message_buffer */
   memset(message_buffer, 0, sizeof(message_buffer));
@@ -83,17 +107,19 @@ void *ihome_monitor ( void *prm)
   {
   	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message  );
   }
-  
+
+
+  memset(message,0,sizeof(message));
   sprintf(message,http_post_request,private_key,input_buffer,message_buffer,output_buffer);
 
   /* send the request */
   total = strlen(message);
   sent = 0;
   do {
-      bytes = write(sockfd,message+sent,total-sent);
+      bytes = write(sock,message+sent,total-sent);
       if (bytes < 0)
       {
-	print_error(0);
+	print_error(0,"write");
       }
       if (bytes == 0)
           break;
@@ -105,19 +131,19 @@ void *ihome_monitor ( void *prm)
   total = sizeof(response)-1;
   received = 0;
   do {
-      bytes = read(sockfd,response-received,total-received);
+      bytes = read(sock,response-received,total-received);
       if (bytes < 0)
       {
-	print_error(0);
+	print_error(0,"read")
       }
       if (bytes == 0)
           break;
       received+=bytes;
   } while (received < total);
 
-  if (received == total)
+  if (received >= total)
   {
-  	print_error(0);
+  	print_error(0,"overflow")
   }
 
 
@@ -158,6 +184,7 @@ void *ihome_monitor ( void *prm)
   }
 
  }
- sleep(10);
+  nanosleep((struct timespec[]){{10, 0}}, NULL);
   }
+  close(sock);
 }

@@ -7,7 +7,11 @@
 * @Last Modified time	: 2015-02-04 09:02:19
 */
 
-#include <time.h>
+// avoid implicit declaration of nanosleep
+#define _POSIX_C_SOURCE 199309L
+
+#include <unistd.h>
+#include <sys/time.h>
 #include "ihome_public.h"
 
 
@@ -35,6 +39,6 @@ while(1)
   // update command inputs array from web server
   
   
-    usleep(100000);
+    nanosleep((struct timespec[]){{0, 100000000}}, NULL);
   }
 }

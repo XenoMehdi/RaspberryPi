@@ -33,7 +33,11 @@
  *	 - first issue
  *	
  */
-#include <time.h>
+// avoid implicit declaration of nanosleep
+#define _POSIX_C_SOURCE 199309L
+
+#include <unistd.h>
+#include <sys/time.h>
 #include "ihome_public.h"
 
 void *ihome_update ( void *prm)
@@ -53,6 +57,6 @@ l_ptr->input->value : !l_ptr->input->value ;
 }
 }
 
-usleep(100000);
+   nanosleep((struct timespec[]){{0, 100000000}}, NULL);
 }
 }

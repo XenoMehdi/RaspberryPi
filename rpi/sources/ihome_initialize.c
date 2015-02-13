@@ -138,7 +138,7 @@ else
     }
   }
 }
-
+#if 0
   /* create the socket */
   socket_monitor  = socket(AF_INET, SOCK_STREAM, 0);
   socket_read     = socket(AF_INET, SOCK_STREAM, 0);
@@ -163,6 +163,6 @@ else
   
   if (connect(socket_read, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
   l_return |= ERR_CONNECT_SOCKET;
-
+#endif
   return l_return ;
 }
