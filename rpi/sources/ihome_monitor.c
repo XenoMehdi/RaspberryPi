@@ -40,8 +40,8 @@
 #include <sys/time.h>
 #include "ihome_public.h"
 
-#define print_error(x,s)	printf("ERROR writing message to socket {%s}\n",s); exit(x);
-
+struct hostent *server;
+struct sockaddr_in serv_addr;
 int bytes, sent, received, total, l_indx;
 
 /* sent and received messages */
@@ -56,7 +56,7 @@ char message_buffer [ 57*nb_OF_ACTIVE_MESSAGES - 2 ]; // 55 char per message + 2
 void *ihome_monitor ( void *prm)
 {
 
-  int l_indx,sock ;
+  int l_indx ;
   nanosleep((struct timespec[]){{2, 0}}, NULL);
 
   /* connect the socket */
@@ -78,7 +78,7 @@ void *ihome_monitor ( void *prm)
 	*(output_buffer + l_indx*2) = outputs_Array_Of_Elements[l_indx].value +48 ;
   }
      /* create the socket */
-    sock = socket(AF_INET, SOCK_STREAM, 0);
+    socket_monitor = socket(AF_INET, SOCK_STREAM, 0);
     server = gethostbyname(host);
 
     memset(&serv_addr,0,sizeof(serv_addr));
@@ -88,9 +88,9 @@ void *ihome_monitor ( void *prm)
     memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
  
      /* connect the socket */
-     if (connect(sock,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
+     if (connect(socket_monitor,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
      /* close the socket */
-     close(sock);
+     close(socket_monitor);
 
 
     /* fill in the parameters : message_buffer */
@@ -116,7 +116,7 @@ void *ihome_monitor ( void *prm)
   total = strlen(message);
   sent = 0;
   do {
-      bytes = write(sock,message+sent,total-sent);
+      bytes = write(socket_monitor,message+sent,total-sent);
       if (bytes < 0)
       {
 	print_error(0,"write");
@@ -131,7 +131,7 @@ void *ihome_monitor ( void *prm)
   total = sizeof(response)-1;
   received = 0;
   do {
-      bytes = read(sock,response-received,total-received);
+      bytes = read(socket_monitor,response-received,total-received);
       if (bytes < 0)
       {
 	print_error(0,"read")
@@ -184,7 +184,7 @@ void *ihome_monitor ( void *prm)
   }
 
  }
+  close(socket_monitor);
   nanosleep((struct timespec[]){{10, 0}}, NULL);
   }
-  close(sock);
 }
