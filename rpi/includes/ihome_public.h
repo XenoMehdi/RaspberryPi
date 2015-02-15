@@ -55,6 +55,9 @@ typedef unsigned char boolean_t;
 #define TRUE ( 1 == 1 )
 #define FALSE ( 1 == 0 )
 
+#define print_error(x,s)	printf("ERROR writing message to socket {%s}\n",s); exit(x);
+
+
 #define nb_OF_ACTIVE_MESSAGES 7
 #define nb_Of_Config_Elements 1
 
@@ -252,8 +255,7 @@ extern int   port ;
 extern char *host ;
 extern char *http_post_request ;
 extern char *http_get_request ;
-extern struct hostent *server;
-extern struct sockaddr_in serv_addr;
+
 extern int   socket_monitor ;
 extern int   socket_read ;
 #endif
