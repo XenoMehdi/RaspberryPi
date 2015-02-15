@@ -90,7 +90,6 @@ char *host =    "data.sparkfun.com";
 char *http_post_request = 
 "POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s&cmd_buffer=rpi_cmd: HTTP/1.1\n\n";
 char *http_get_request = " GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?ne[cmd_buffer]=rpi_cmd: HTTP/1.1\n\n" ;
-struct hostent *server;
-struct sockaddr_in serv_addr;
+
 int   socket_monitor ;
 int   socket_read ;
