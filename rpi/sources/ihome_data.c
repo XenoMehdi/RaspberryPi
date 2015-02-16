@@ -78,7 +78,7 @@ const sw_configuration_t software_configuration_default = {3} ; // set lcd and b
 // initialize context pile with the first input, output and confiduration in the array : to be updated
 config_object_t config_Array_Of_Elements [ nb_Of_Config_Elements ];
 context_object_t context_pile = { 
-					&inputs_Array_Of_Elements[0],
+					&commands_Array_Of_Elements[0],
 					&outputs_Array_Of_Elements[0],
 					&config_Array_Of_Elements[0],
 					NULL,
@@ -87,9 +87,15 @@ context_object_t context_pile = {
 /* server configuration */
 int   port =    80;
 char *host =    "data.sparkfun.com";
+//int   port =    8080;
+//char *host =    "192.168.1.99";
+//char *private_key="6vD8Ly0K97FnD9qEW7lahwLpwwY"; // local
+char *private_key="2mP7ZjdbvVcbn8m92Vm9"; // sparkfun
 char *http_post_request = 
 "POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s&cmd_buffer=rpi_cmd: HTTP/1.1\n\n";
-char *http_get_request = " GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?ne[cmd_buffer]=rpi_cmd: HTTP/1.1\n\n" ;
+//"POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s&cmd_buffer=rpi_cmd: HTTP/1.1\n\n";
+char *http_get_request = "GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?page=1&eq[message_buffer]=web_command&gt[timestamp]=now-2min HTTP/1.1\n\n" ;
+//char *http_get_request = "GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?page=1&eq[cmd_buffer]=rpi_cmd:&gt[timestamp]=now-2min HTTP/1.1\n\n" ;
 
 int   socket_monitor ;
 int   socket_read ;

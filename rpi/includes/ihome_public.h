@@ -255,6 +255,7 @@ extern int   port ;
 extern char *host ;
 extern char *http_post_request ;
 extern char *http_get_request ;
+extern char *private_key ;
 
 extern int   socket_monitor ;
 extern int   socket_read ;

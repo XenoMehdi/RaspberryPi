@@ -85,10 +85,42 @@ while(1)
 
   if (received >= total)
   {
-  	print_error(0,"overflow")
+//  	print_error(0,"overflow read")
   }
-  
-  printf("%s\n",response);
+
+ /* process response */
+ e1 = strstr(response, "\r\n\r\n");
+ //printf("r) %s\n",response);
+ if(e1 != NULL)
+ {
+  if (e1[4] == '0')
+  {
+ 	printf("no web command\n");
+  }
+  else
+  {
+	e2 = strstr (e1, "web_command");
+//	e1 = strstr (e2, "\r\n");
+//	e2 = strstr (e1+2, "\r\n");
+	int number_of_comma = 0;
+//	printf("%s",e2);
+	for(l_indx=0 ; l_indx<nb_Of_Command_Elements && ( *e2 != '\n') ;  e2++)
+{
+//	printf("char %c",*e2);
+
+	if(number_of_comma == 2 && *e2 != ':' && *e2 != ',')
+	commands_Array_Of_Elements[l_indx++].value = atoi(e2) ;
+
+	if(*e2 == ',') number_of_comma++ ;
+}
+	for(l_indx=0 ; l_indx<nb_Of_Command_Elements ; l_indx++)
+		printf("%d ",commands_Array_Of_Elements[l_indx].value);
+ printf("%d\n",number_of_comma);
+
+  }
+
+ } 
+ 
     /* close the socket */
      close(socket_read);  
     nanosleep((struct timespec[]){{0, 100000000}}, NULL);
