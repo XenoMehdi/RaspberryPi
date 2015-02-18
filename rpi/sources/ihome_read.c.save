@@ -53,13 +53,13 @@ while(1)
      /* close the socket */
      close(socket_read);
   
+  
   /* send the request */
-/*  total = strlen(http_get_request);
+  total = strlen(http_get_request);
   sent = 0;
-/*  do {*/
-//      bytes = write(socket_read,http_get_request+sent,total-sent);
-      send(socket_read,http_get_request,total,0);
-     /* if (bytes < 0)
+  do {
+      bytes = write(socket_read,http_get_request+sent,total-sent);
+      if (bytes < 0)
       {
 	print_error(0,"write");
       }
@@ -67,27 +67,24 @@ while(1)
           break;
       sent+=bytes;
   } while (sent < total);
-*/
+
   /* receive the response */
   memset(response,0,sizeof(response));
   total = sizeof(response)-1;
   received = 0;
-//  do {
-      recv(socket_read,response,total,0);
-      //bytes = read(socket_read,response+received,total-received);
-    /*  if (bytes < 0)
+  do {
+      bytes = read(socket_read,response-received,total-received);
+      if (bytes < 0)
       {
-     close(socket_read);
 	print_error(0,"read")
       }
       if (bytes == 0)
           break;
       received+=bytes;
   } while (received < total);
-*/
+
   if (received >= total)
   {
-     close(socket_read);  
 //  	print_error(0,"overflow read")
   }
 
@@ -98,36 +95,33 @@ while(1)
  {
   if (e1[4] == '0')
   {
-// 	printf("no web command\n");
+ 	printf("no web command\n");
   }
   else
   {
-//	printf("%s\n",e1);
-	e2 = strstr (e1, "web_command");
-//	e1 = strstr (e2, "\r\n");
-//	e2 = strstr (e1+2, "\r\n");
+	e2 = strstr (e1, "cmd_buffer");
+	e1 = strstr (e2, "\r\n");
+	e2 = e1;
+	
 	int number_of_comma = 0;
-//	printf("%s",e2);
 	for(l_indx=0 ; l_indx<nb_Of_Command_Elements && ( *e2 != '\n') ;  e2++)
 {
-//	printf("char %c",*e2);
-
-	if(number_of_comma == 2 && *e2 != ':' && *e2 != ',')
+	
+	if(number_of_comma == 3)
 	commands_Array_Of_Elements[l_indx++].value = atoi(e2) ;
-
-	if(*e2 == ',') number_of_comma++ ;
+number_of_comma
 }
-//	for(l_indx=0 ; l_indx<nb_Of_Command_Elements ; l_indx++)
-//		printf("%d ",commands_Array_Of_Elements[l_indx].value);
-// printf("%d\n",number_of_comma);
+	for(l_indx=0 ; l_indx<nb_Of_Command_Elements ; l_indx++)
+		printf(":: %d ",commands_Array_Of_Elements[l_indx].value);
 
   }
 
  } 
-//printf("Debug Read.c\n" );
+ printf("e2 2) %s\n",e2);
+ 
     /* close the socket */
      close(socket_read);  
-    nanosleep((struct timespec[]){{0, 50000000}}, NULL);
+    nanosleep((struct timespec[]){{0, 100000000}}, NULL);
 
   }
 }

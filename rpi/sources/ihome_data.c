@@ -89,13 +89,17 @@ int   port =    80;
 char *host =    "data.sparkfun.com";
 //int   port =    8080;
 //char *host =    "192.168.1.99";
-//char *private_key="6vD8Ly0K97FnD9qEW7lahwLpwwY"; // local
+//char *private_key="wVKpKplDbXfY092Ekzq6H0v9adPQ"; // local
 char *private_key="2mP7ZjdbvVcbn8m92Vm9"; // sparkfun
 char *http_post_request = 
+//sparkfun
 "POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s&cmd_buffer=rpi_cmd: HTTP/1.1\n\n";
-//"POST /input/ZGKndY934ZCGMvVqbxVq?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s&cmd_buffer=rpi_cmd: HTTP/1.1\n\n";
-char *http_get_request = "GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?page=1&eq[message_buffer]=web_command&gt[timestamp]=now-2min HTTP/1.1\n\n" ;
-//char *http_get_request = "GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?page=1&eq[cmd_buffer]=rpi_cmd:&gt[timestamp]=now-2min HTTP/1.1\n\n" ;
+//local
+//"POST /input/lqopopxBV0fLw2abxBAmTwPYlKXz?private_key=%s&input_buffer=%s&message_buffer=%s&output_buffer=%s&cmd_buffer=rpi_cmd: HTTP/1.1\n\n";
+//local
+//char *http_get_request = "GET /output/lqopopxBV0fLw2abxBAmTwPYlKXz.jsonp?page=1&eq[message_buffer]=web_command&gt[timestamp]=now-2min HTTP/1.1\n\n" ;
+//sparkfun
+char *http_get_request = "GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?page=1&eq[message_buffer]=web_command&gt[timestamp]=now-1min HTTP/1.1\n\n" ;
 
 int   socket_monitor ;
 int   socket_read ;

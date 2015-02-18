@@ -95,29 +95,36 @@ void *ihome_monitor ( void *prm)
 
     /* fill in the parameters : message_buffer */
   memset(message_buffer, 0, sizeof(message_buffer));
+  boolean_t no_message_to_send = TRUE ;
   for(l_indx = 0 ; l_indx < nb_OF_ACTIVE_MESSAGES - 1 ; l_indx++)
   {
   	if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
 			{
 		  	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message );
 		  	strcat(message_buffer, ",+");
+			active_message_list[l_indx].sent_to_server = TRUE ;
+			no_message_to_send = FALSE ;
 			}
   }
   if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
   {
   	strcat(message_buffer, messages_list_cst[active_message_list[l_indx].id_message].monitor_message.message  );
   }
-
+  if(no_message_to_send == TRUE)
+  {
+  	strcat(message_buffer, messages_list_cst[NO_ACTIVE_MESSAGE].monitor_message.message  );
+  }
 
   memset(message,0,sizeof(message));
   sprintf(message,http_post_request,private_key,input_buffer,message_buffer,output_buffer);
 
   /* send the request */
   total = strlen(message);
-  sent = 0;
-  do {
-      bytes = write(socket_monitor,message+sent,total-sent);
-      if (bytes < 0)
+//  sent = 0;
+//  do {
+//      bytes = write(socket_monitor,message+sent,total-sent);
+     send(socket_monitor,message,total,0);
+    /*  if (bytes < 0)
       {
 	print_error(0,"write");
       }
@@ -125,25 +132,28 @@ void *ihome_monitor ( void *prm)
           break;
       sent+=bytes;
   } while (sent < total);
-
+*/
   /* receive the response */
   memset(response,0,sizeof(response));
   total = sizeof(response)-1;
   received = 0;
-  do {
-      bytes = read(socket_monitor,response-received,total-received);
-      if (bytes < 0)
+//  do {
+//      bytes = read(socket_monitor,response+received,total-received);
+      recv(socket_monitor,response,total,0);
+/*      if (bytes < 0)
       {
-	print_error(0,"read")
+     close(socket_monitor);
+//	print_error(0,"read")
       }
       if (bytes == 0)
           break;
       received+=bytes;
   } while (received < total);
-
+*/
   if (received >= total)
   {
-  	print_error(0,"overflow")
+  close(socket_monitor);
+//  	print_error(0,"overflow")
   }
 
 

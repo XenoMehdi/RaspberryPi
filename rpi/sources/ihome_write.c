@@ -43,7 +43,7 @@
 
 void *ihome_write ( void *prm)
 {
-  unsigned int l_indx, activate_sleep, no_message_to_display ;
+  unsigned int l_indx, activate_sleep, no_message_to_display, default_messaged_displayed ;
 
   while(1){
   // update GPIO outputs
@@ -54,6 +54,7 @@ void *ihome_write ( void *prm)
 	}
 
     no_message_to_display = 1 ;
+    default_messaged_displayed = 0 ;
   // Update message displayed on lcd's screen
   for (l_indx = 0; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
   {
@@ -76,10 +77,13 @@ void *ihome_write ( void *prm)
     if(activate_sleep == 1 ) 
 	nanosleep((struct timespec[]){{2, 0}}, NULL);
     else
-	nanosleep((struct timespec[]){{1, 0}}, NULL);
+	nanosleep((struct timespec[]){{0, 10000000}}, NULL);
   }
     // if no message to display, display home message
-    if(no_message_to_display == 1 )
+    if(no_message_to_display == 1 && default_messaged_displayed != 1)
+{
 	ihome_lcd_write ( messages_list_cst[NO_ACTIVE_MESSAGE].lcd_message );
+default_messaged_displayed = 1 ;
+}
  }
 }

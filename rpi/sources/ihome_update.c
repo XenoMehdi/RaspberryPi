@@ -42,6 +42,7 @@
 
 void *ihome_update ( void *prm)
 {
+unsigned int l_indx ;
 
 while(1)
 {
@@ -56,7 +57,19 @@ l_ptr->output->value = (l_ptr->config->active_on_high == TRUE) ?
 l_ptr->input->value : !l_ptr->input->value ;
 }
 }
+for (l_indx = 0; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
+  {
+    // For each element of active messages, if id is different of NO_ACTIVE_MESSAGE then print message
+    if (active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE)
+    {
+      if ( active_message_list[l_indx].printed_to_lcd == TRUE
+	&&  active_message_list[l_indx].sent_to_server == TRUE )
+      {
+			active_message_list[l_indx].id_message = NO_ACTIVE_MESSAGE ;
+      }
+    }
+  }
 
-   nanosleep((struct timespec[]){{0, 100000000}}, NULL);
+   nanosleep((struct timespec[]){{0, 10000000}}, NULL);
 }
 }
