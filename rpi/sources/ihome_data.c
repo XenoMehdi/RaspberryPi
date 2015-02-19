@@ -53,13 +53,17 @@ const output_object_t output_object_cst = { TRUE, FALSE, PTHREAD_MUTEX_INITIALIZ
 
 // List of defined messages 
 const messages_object_t messages_list_cst [ nb_Of_Messages ] = {
-                {{"     iHome","    Running"}, {"iHome+is+running"} },
-				{{"    WELCOME",""}, {"Welcome"} },
-				{{" COPYRIGHT 2015","     F.E.S.I"}, {"Copyright+2015+F.E.S.I"} },
-                {{"","LCD INIT FAILED"}, {"LCD+Initialization+failed"} },
-                {{"","LCD INIT SUCCESS"}, {"LCD+Initialization+success"} },
-                {{" SOFTWARE INIT","  SUCCESSFULLY"}, {"Initialization+of+Software+data+success"} },
-                {{"SEND DATA TO","phant.io FAIL"}, {""} }
+        {{"     iHome","    Running"}, {"iHome+is+running"} }, 	// NO_ACTIVE_MESSAGE
+	{{"    WELCOME",""}, {"Welcome"} },			// MESSAGE_1
+	{{" COPYRIGHT 2015","     F.E.S.I"}, {"Copyright+2015+F.E.S.I"} }, // MESSAGE_2
+        {{"","LCD INIT FAILED"}, {"LCD+Initialization+failed"} },		// MESSAGE_3
+        {{"","LCD INIT SUCCESS"}, {"LCD+Initialization+success"} },		// MESSAGE_4
+        {{" SOFTWARE INIT","  SUCCESSFULLY"}, {"Initialization+of+Software+data+success"} }, // MESSAGE_5
+        {{"SEND DATA TO","phant.io FAIL"}, {""} } // MESSAGE_6
+        {{"TURN OUTPUT %D", "    ON    "},{"Turn+Output+%d+ON"}},        // MESSAGE_7
+        {{"TURN OUTPUT %D", "    OFF    "},{"Turn+Output+%d+OFF"}},        // MESSAGE_8
+                // MESSAGE_9
+                // MESSAGE_10
 };
 
 // lcd handler
