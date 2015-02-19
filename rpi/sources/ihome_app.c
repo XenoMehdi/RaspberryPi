@@ -134,6 +134,6 @@
 
  /* close bcm2835 drivers */
  bcm2835_close();
-  printf("the end\n")
+  printf("the end\n");
  return 0;
  }
