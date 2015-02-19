@@ -43,6 +43,7 @@
 struct hostent *server;
 struct sockaddr_in serv_addr;
 int bytes, sent, received, total, l_indx;
+boolean_t l_socket_failed;
 
 /* sent and received messages */
 char message[1024],response[500], *e1, *e2;
@@ -87,12 +88,17 @@ void *ihome_monitor ( void *prm)
     memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
     memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
  
+    l_socket_failed = FALSE ; 
      /* connect the socket */
      if (connect(socket_monitor,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
+     {
      /* close the socket */
      close(socket_monitor);
-
-
+     l_socket_failed = TRUE ;
+     }
+     
+     if(l_socket_failed == FALSE )
+{
     /* fill in the parameters : message_buffer */
   memset(message_buffer, 0, sizeof(message_buffer));
   boolean_t no_message_to_send = TRUE ;
@@ -152,8 +158,9 @@ void *ihome_monitor ( void *prm)
 */
   if (received >= total)
   {
-  close(socket_monitor);
 //  	print_error(0,"overflow")
+printf("received data > total in monitor task \n");
+goto end_socket;
   }
 
 
@@ -194,7 +201,9 @@ void *ihome_monitor ( void *prm)
   }
 
  }
+  end_socket:
   close(socket_monitor);
   nanosleep((struct timespec[]){{10, 0}}, NULL);
+  }
   }
 }
