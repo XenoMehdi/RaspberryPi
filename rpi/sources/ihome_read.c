@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include "ihome_public.h"
+boolean_t l_socket_failed;
 
 
 void *ihome_read ( void *prm)
@@ -47,12 +48,17 @@ while(1)
     serv_addr.sin_port = htons(port);
     memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
     memcpy(&serv_addr.sin_addr.s_addr,server->h_addr_list[0],server->h_length);
- 
+
+     l_socket_failed = FALSE ; 
      /* connect the socket */
      if (connect(socket_read,(struct sockaddr *)&serv_addr,sizeof(serv_addr)) < 0)
-     /* close the socket */
+     {/* close the socket */
      close(socket_read);
-  
+       l_socket_failed = TRUE ;
+     }
+     
+     if(l_socket_failed == FALSE )
+{
   /* send the request */
 /*  total = strlen(http_get_request);
   sent = 0;
@@ -87,7 +93,8 @@ while(1)
 */
   if (received >= total)
   {
-     close(socket_read);  
+     printf("received data > total in read task \n");
+goto end_socket;
 //  	print_error(0,"overflow read")
   }
 
@@ -125,9 +132,10 @@ while(1)
 
  } 
 //printf("Debug Read.c\n" );
+end_socket:
     /* close the socket */
      close(socket_read);  
     nanosleep((struct timespec[]){{0, 50000000}}, NULL);
-
+}
   }
 }
