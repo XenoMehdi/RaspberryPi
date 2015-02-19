@@ -130,10 +130,10 @@
  
  /* close the created sockets */
  //close(socket_monitor);
- close(socket_read);
+ //close(socket_read);
 
  /* close bcm2835 drivers */
  bcm2835_close();
-  
+  printf("the end\n")
  return 0;
  }
