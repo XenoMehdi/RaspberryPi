@@ -59,9 +59,9 @@ const messages_object_t messages_list_cst [ nb_Of_Messages ] = {
         {{"","LCD INIT FAILED"}, {"LCD+Initialization+failed"} },		// MESSAGE_3
         {{"","LCD INIT SUCCESS"}, {"LCD+Initialization+success"} },		// MESSAGE_4
         {{" SOFTWARE INIT","  SUCCESSFULLY"}, {"Initialization+of+Software+data+success"} }, // MESSAGE_5
-        {{"SEND DATA TO","phant.io FAIL"}, {""} } // MESSAGE_6
+        {{"SEND DATA TO","phant.io FAIL"}, {""} }, // MESSAGE_6
         {{"TURN OUTPUT %D", "    ON    "},{"Turn+Output+%d+ON"}},        // MESSAGE_7
-        {{"TURN OUTPUT %D", "    OFF    "},{"Turn+Output+%d+OFF"}},        // MESSAGE_8
+        {{"TURN OUTPUT %D", "    OFF    "},{"Turn+Output+%d+OFF"}}        // MESSAGE_8
                 // MESSAGE_9
                 // MESSAGE_10
 };
