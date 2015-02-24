@@ -64,7 +64,7 @@
  int l_indx ;
 
  ihome_init_status = ihome_initialize () ;
- log_print("init... [%d]\n", ihome_init_status) ;
+ log_print("init...\n") ;
  
  pthread_attr_init ( &write_attr ) ;
  pthread_attr_init ( &read_attr ) ;
