@@ -95,6 +95,7 @@ void *ihome_monitor ( void *prm)
      /* close the socket */
      close(socket_monitor);
      l_socket_failed = TRUE ;
+     log_print("monitor socket failed to connect.\n");
      }
      
      if(l_socket_failed == FALSE )
@@ -159,7 +160,7 @@ void *ihome_monitor ( void *prm)
   if (received >= total)
   {
 //  	print_error(0,"overflow")
-printf("received data > total in monitor task \n");
+log_print("received data > total in monitor task \n");
 goto end_socket;
   }
 
