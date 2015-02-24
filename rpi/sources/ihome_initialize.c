@@ -164,5 +164,8 @@ else
   if (connect(socket_read, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
   l_return |= ERR_CONNECT_SOCKET;
 #endif
+
+  log_file_desc = fopen("../log/log.txt", "a");
+  
   return l_return ;
 }
