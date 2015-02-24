@@ -55,6 +55,8 @@ while(1)
      {/* close the socket */
      close(socket_read);
        l_socket_failed = TRUE ;
+            log_print("read socket failed to connect.\n");
+
      }
      
      if(l_socket_failed == FALSE )
@@ -93,7 +95,7 @@ while(1)
 */
   if (received >= total)
   {
-     printf("received data > total in read task \n");
+     log_print("received data > total in read task \n");
 goto end_socket;
 //  	print_error(0,"overflow read")
   }
