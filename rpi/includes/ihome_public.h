@@ -56,7 +56,7 @@ typedef unsigned char boolean_t;
 #define FALSE ( 1 == 0 )
 
 #define print_error(x,s)	printf("ERROR writing message to socket {%s}\n",s); exit(x);
-#define log_print(x) fprintf(log_file_desc,x)
+#define log_print(x) fprintf(log_file_desc,x) ; printf(x)
 
 #define nb_OF_ACTIVE_MESSAGES 7
 #define nb_Of_Config_Elements 1
