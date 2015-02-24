@@ -107,3 +107,6 @@ char *http_get_request = "GET /output/ZGKndY934ZCGMvVqbxVq.jsonp?page=1&eq[messa
 
 int   socket_monitor ;
 int   socket_read ;
+
+/* Log file descriptor */
+FILE *log_file_desc;
