@@ -62,9 +62,8 @@
  int main( )
  {
  int l_indx ;
-
  ihome_init_status = ihome_initialize () ;
- log_print("init...\n") ;
+ log_print("initialization\n") ;
  
  pthread_attr_init ( &write_attr ) ;
  pthread_attr_init ( &read_attr ) ;
@@ -134,7 +133,7 @@
 
  /* close bcm2835 drivers */
  bcm2835_close();
- fprintf(log_file_desc,"the end\n");
- fclose(log_file_desc);
+ log_print("the end\n");
+// fclose(log_file_desc);
  return 0;
  }

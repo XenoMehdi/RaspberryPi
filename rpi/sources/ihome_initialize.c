@@ -165,7 +165,6 @@ else
   l_return |= ERR_CONNECT_SOCKET;
 #endif
 
-  log_file_desc = fopen("../log/log.txt", "a");
-  
+//  log_file_desc = fopen("log/log.txt", "a+");
   return l_return ;
 }

@@ -204,7 +204,7 @@ goto end_socket;
  }
   end_socket:
   close(socket_monitor);
-  nanosleep((struct timespec[]){{10, 0}}, NULL);
+  nanosleep((struct timespec[]){{15, 0}}, NULL);
   }
   }
 }

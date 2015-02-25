@@ -56,7 +56,13 @@ typedef unsigned char boolean_t;
 #define FALSE ( 1 == 0 )
 
 #define print_error(x,s)	printf("ERROR writing message to socket {%s}\n",s); exit(x);
-#define log_print(x) fprintf(log_file_desc,x) ; printf(x)
+#define log_print(x) {	time_t t = time(NULL); \
+			struct tm tm = *localtime(&t); \
+			log_file_desc = fopen("/home/pi/projects/iHome/rpi/log/log.txt", "a+"); \
+			if(log_file_desc != NULL) {\
+			fprintf(log_file_desc,"[%d/%d/%d %d:%d:%d] %s",tm.tm_mday, tm.tm_mon+1, tm.tm_year +1900, tm.tm_hour, tm.tm_min, tm.tm_sec, x);	\
+			fclose(log_file_desc);}	\
+			}
 
 #define nb_OF_ACTIVE_MESSAGES 7
 #define nb_Of_Config_Elements 1
