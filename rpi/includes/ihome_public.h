@@ -1,43 +1,44 @@
 /**
- *	API for iHome Software.
+ *  API for iHome Software.
  *
  *  @Module   ihome_public
- *	@author 	El Mehdi El Fakir
- *	@email		elmehdi@elfakir.me
- *	@website	--
- *	@link		  --
- *	@version 	v1.0
- *	@compiler GCC
+ *  @author   El Mehdi El Fakir
+ *  @email    elmehdi@elfakir.me
+ *  @website  --
+ *  @link     --
+ *  @version  v1.0
+ *  @compiler GCC
  *  @hardware Raspberry Pi B+
- *	@license	GNU GPL v3
- *	
+ *  @license  GNU GPL v3
+ *
  * |----------------------------------------------------------------------
  * | Copyright (C) FEZ EMBEDDED SYSTEMS INDUSTRY, 2015
- * | 
+ * |
  * | This program is free software: you can redistribute it and/or modify
  * | it under the terms of the GNU General Public License as published by
  * | the Free Software Foundation, either version 3 of the License, or
  * | any later version.
- * |  
+ * |
  * | This program is distributed in the hope that it will be useful,
  * | but WITHOUT ANY WARRANTY; without even the implied warranty of
  * | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * | GNU General Public License for more details.
- * | 
+ * |
  * | You should have received a copy of the GNU General Public License
  * | along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * |----------------------------------------------------------------------
- *	
- *	Version 1.0
- *	 - January 08, 2015
- *	 - first issue
- *	
+ *
+ *  Version 1.0
+ *   - January 08, 2015
+ *   - first issue
+ *
  */
 #ifndef IHOME_PUBLIC_H
 #define IHOME_PUBLIC_H
 
 #include <stdio.h>
 #include <pthread.h>
+#include <signal.h>
 #include <bcm2835.h>
 
 #include <stdio.h> /* printf, sprintf */
@@ -55,14 +56,14 @@ typedef unsigned char boolean_t;
 #define TRUE ( 1 == 1 )
 #define FALSE ( 1 == 0 )
 
-#define print_error(x,s)	printf("ERROR writing message to socket {%s}\n",s); exit(x);
-#define log_print(x) {	time_t t = time(NULL); \
-			struct tm tm = *localtime(&t); \
-			log_file_desc = fopen("/home/pi/projects/iHome/rpi/log/log.txt", "a+"); \
-			if(log_file_desc != NULL) {\
-			fprintf(log_file_desc,"[%d/%d/%d %d:%d:%d] %s",tm.tm_mday, tm.tm_mon+1, tm.tm_year +1900, tm.tm_hour, tm.tm_min, tm.tm_sec, x);	\
-			fclose(log_file_desc);}	\
-			}
+#define print_error(x,s)  printf("ERROR writing message to socket {%s}\n",s); exit(x);
+#define log_print(x) {  time_t t = time(NULL); \
+      struct tm tm = *localtime(&t); \
+      log_file_desc = fopen("/root/log/log.txt", "a+"); \
+      if(log_file_desc != NULL) {\
+      fprintf(log_file_desc,"[%d/%d/%d %d:%d:%d] %s",tm.tm_mday, tm.tm_mon+1, tm.tm_year +1900, tm.tm_hour, tm.tm_min, tm.tm_sec, x); \
+      fclose(log_file_desc);} \
+      }
 
 #define nb_OF_ACTIVE_MESSAGES 7
 #define nb_Of_Config_Elements 1
@@ -123,13 +124,13 @@ typedef enum {
 } output_element_t ;
 
 // define the structure of configuration object
-typedef enum{
+typedef enum {
   NORMAL_RELAY,
   PERIODIC_TRIGGERING
 } output_type_t ;
 
 // define the structure of configuration object
-typedef struct{
+typedef struct {
   output_type_t type_of_output  ;
   boolean_t     active_on_high  ;
   unsigned int  time_before_activation ;
@@ -141,7 +142,7 @@ typedef struct{
 } config_object_t ;
 
 // define the structure of contexte object
-typedef struct context_object_s{
+typedef struct context_object_s {
   input_object_t *input ;
   output_object_t *output ;
   config_object_t *config ;
@@ -197,17 +198,23 @@ typedef enum {
 
 // define a structure for software configuration
 typedef  union {
-    unsigned int word ;
-    struct {
-      pin_state_t turn_LCD_Power      :1 ;
-      pin_state_t turn_LCD_Backlight  :1 ;
-    } options ;
+  unsigned int word ;
+  struct {
+    pin_state_t turn_LCD_Power      : 1 ;
+    pin_state_t turn_LCD_Backlight  : 1 ;
+  } options ;
 } sw_configuration_t ;
 
 // Define configuration structure
 /**********************/
 /* Public Data        */
 /**********************/
+// threads
+extern pthread_t write_thread ;
+extern pthread_t read_thread ;
+extern pthread_t monitor_thread ;
+extern pthread_t update_thread ;
+
 // Arrays of I/O pins
 extern unsigned int  lcd_pins [] ;
 extern unsigned int  pins_in  [nb_Of_Input_Elements]  ;
@@ -215,6 +222,9 @@ extern unsigned int  pins_out [nb_Of_Output_Elements] ;
 
 // lcd handler
 extern int lcd_handler;
+
+// variable to handle the sigterm signal, if = false the main while should stop and programm stops
+extern boolean_t program_is_running ;
 
 // Array of input elements.
 extern input_object_t inputs_Array_Of_Elements [ nb_Of_Input_Elements ];
@@ -225,7 +235,7 @@ extern const input_object_t input_object_cst;
 extern output_object_t outputs_Array_Of_Elements [ nb_Of_Output_Elements ];
 extern const output_object_t output_object_cst;
 
-// List of defined messages 
+// List of defined messages
 extern const messages_object_t messages_list_cst [ nb_Of_Messages ] ;
 
 // list of active messages to send to server and to print on LCD
@@ -243,7 +253,8 @@ extern int  lcd_handler ;
 
 // initial context object
 extern config_object_t config_Array_Of_Elements[nb_Of_Config_Elements];
-extern context_object_t context_pile;
+extern context_object_t *context_pile;
+extern context_object_t context_1, context_2, context_3, context_4 ;
 
 /**********************/
 /* Public Functions   */
@@ -268,4 +279,10 @@ extern int   socket_read ;
 
 /* Log file descriptor */
 extern FILE *log_file_desc;
+
+// functions to run when a signal is caught
+extern void ihome_signal_term();
+extern void ihome_signal_hup();
+extern void ihome_signal_int();
+
 #endif

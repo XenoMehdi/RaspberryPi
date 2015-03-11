@@ -49,7 +49,7 @@ while(1)
 
 context_object_t *l_ptr ;
 
-for( l_ptr = &context_pile ; l_ptr != NULL ; l_ptr = l_ptr->next )
+for( l_ptr = context_pile ; l_ptr != NULL ; l_ptr = l_ptr->next )
 {
 if ( l_ptr->config->type_of_output == NORMAL_RELAY )
 {
@@ -70,6 +70,6 @@ for (l_indx = 0; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
     }
   }
 
-   nanosleep((struct timespec[]){{0, 10000000}}, NULL);
+   nanosleep((struct timespec[]){{0, 5000000}}, NULL);
 }
 }

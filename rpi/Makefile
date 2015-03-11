@@ -7,11 +7,13 @@
 # project name (generate executable with this name)
 TARGET   = iHome_Start
 
-CC       = gcc
+# CC       = gcc
+CC	= arm-ihome-linux-gnueabi-gcc
+#CC	= arm-ihome-linux-uclibcgnueabi-gcc
 # compiling flags here
 CFLAGS   = -std=c99 -Wall -I$(INCDIR)
 
-LINKER   = gcc -o
+LINKER   = $(CC) -o
 # linking flags here
 LFLAGS   = -lpthread -lbcm2835
 
@@ -28,7 +30,7 @@ rm       = rm -f
 
 
 $(BINDIR)/$(TARGET): $(OBJECTS)
-	@$(LINKER) $@ $(OBJECTS) $(LFLAGS)
+	@$(LINKER)  $@ $(OBJECTS) $(LFLAGS)
 	@echo "Linking complete!"
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
@@ -44,3 +46,7 @@ clean:
 remove: clean
 	@$(rm) $(BINDIR)/$(TARGET)
 	@echo "Executable removed!"
+
+.PHONEY: shared_lib
+shared_lib:
+	$(CC) -shared -o libihome.a $(OBJECTS) #-lbcm2835
