@@ -8,14 +8,15 @@
 TARGET   = iHome_Start
 
 # CC       = gcc
-CC	= arm-ihome-linux-gnueabi-gcc
+CC	= arm-linux-gcc
+#CC	= arm-ihome-linux-gnueabi-gcc
 #CC	= arm-ihome-linux-uclibcgnueabi-gcc
 # compiling flags here
-CFLAGS   = -std=c99 -Wall -I$(INCDIR)
+CFLAGS   = -std=c99 -g -O0 -Wall -I$(INCDIR) -I/home/el/xenomai_rpi/xenomai_rpi_buildroot/buildroot-2014.02/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/xenomai/
 
 LINKER   = $(CC) -o
 # linking flags here
-LFLAGS   = -lpthread -lbcm2835
+LFLAGS   = -L/home/el/xenomai_rpi/xenomai_rpi_buildroot/buildroot-2014.02/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib -lnative -lxenomai -lbcm2835 -lcJSON
 
 # change these to set the proper directories where each files shoould be
 SRCDIR   = ./sources

@@ -35,7 +35,8 @@
 
 // avoid implicit declaration of nanosleep
 #define _POSIX_C_SOURCE 199309L
-
+#define NO_MONITOR
+ 
 #include <unistd.h>
 #include <sys/time.h>
 #include "ihome_public.h"
@@ -54,17 +55,19 @@ char input_buffer  [ 2 * nb_Of_Input_Elements - 1 ];
 char output_buffer [ 2 * nb_Of_Output_Elements - 1 ];
 char message_buffer [ 57 * nb_OF_ACTIVE_MESSAGES - 2 ]; // 55 char per message + 2 for , & space
 
-void *ihome_monitor ( void *prm)
+void ihome_monitor ( void *prm)
 {
-
+  log_print("Monitor RT Task succes\n");
   int l_indx ;
-  nanosleep((struct timespec[]) {{2, 0}}, NULL);
+  //nanosleep((struct timespec[]) {{2, 0}}, NULL);
+  rt_task_set_periodic(NULL, TM_NOW, 30000000000);
 
   /* connect the socket */
   /*  if ( connect(socket_monitor, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {print_error(0,"connection")}
   */
   while (1) {
+  #ifndef NO_MONITOR
     /* fill in the parameters : input_buffer */
     memset(input_buffer, ':', sizeof(input_buffer));
     for (l_indx = 0 ; l_indx < nb_Of_Input_Elements ; l_indx++)
@@ -208,15 +211,17 @@ void *ihome_monitor ( void *prm)
         {
           if ( active_message_list[l_indx].id_message != NO_ACTIVE_MESSAGE )
           {
-            pthread_mutex_lock(&active_message_list[l_indx].mutex);
+            //pthread_mutex_lock(&active_message_list[l_indx].mutex);
             active_message_list[l_indx].sent_to_server = TRUE ;
-            pthread_mutex_unlock(&active_message_list[l_indx].mutex);
+            //pthread_mutex_unlock(&active_message_list[l_indx].mutex);
           }
         }
       }
 
     }
-    nanosleep((struct timespec[]) {{30, 0}}, NULL);
+//    nanosleep((struct timespec[]) {{30, 0}}, NULL);
+    #endif
 
+    rt_task_wait_period(NULL);
   }
 }

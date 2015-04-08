@@ -35,11 +35,11 @@
  */
 #ifndef IHOME_PUBLIC_H
 #define IHOME_PUBLIC_H
+#include <signal.h>
 
 #include <stdio.h>
-#include <pthread.h>
-#include <signal.h>
 #include <bcm2835.h>
+#include <unistd.h>
 
 #include <stdio.h> /* printf, sprintf */
 #include <stdlib.h> /* read, write, close */
@@ -48,6 +48,57 @@
 #include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
 #include <netdb.h> /* struct hostent, gethostbyname */
 
+// xenomai problem with c99
+typedef char *caddr_t;
+#include <native/task.h>
+
+/**********************/
+/* Data Definitions   */
+/**********************/
+RT_TASK write_thread ;
+RT_TASK read_thread ;
+RT_TASK monitor_thread ;
+RT_TASK update_thread ;
+RT_TASK write_messages_thread ;
+RT_TASK op_led_thread ;
+
+/*  Write RT Task */
+#define WRITE_TASK_PRIO   70
+#define WRITE_MODE    T_FPU|T_JOINABLE
+#define WRITE_TASK_STKSZ  4096
+#define WRITE_TASK_NAME   "Write rt Task"
+
+/*  Write Messages RT Task */
+#define WRITE_MESSAGES_TASK_PRIO   50
+#define WRITE_MESSAGES_MODE    T_FPU|T_JOINABLE
+#define WRITE_MESSAGES_TASK_STKSZ  4096
+#define WRITE_MESSAGES_TASK_NAME   "Write Messages rt Task"
+
+/*  Read RT Task  */
+#define READ_TASK_PRIO    90
+#define READ_MODE     T_FPU|T_JOINABLE
+#define READ_TASK_STKSZ   4096
+#define READ_TASK_NAME    "Read rt Task"
+
+/*  Monitor RT Task */
+#define MONITOR_TASK_PRIO 60
+#define MONITOR_MODE    T_FPU|T_JOINABLE
+#define MONITOR_TASK_STKSZ  4096
+#define MONITOR_TASK_NAME "Monitor rt Task"
+
+/*  Update RT Task  */
+#define UPDATE_TASK_PRIO  80
+#define UPDATE_MODE     T_FPU|T_JOINABLE
+#define UPDATE_TASK_STKSZ 4096
+#define UPDATE_TASK_NAME  "Update rt Task"
+
+/*  Update RT Task  */
+#define OP_LED_TASK_PRIO  50
+#define OP_LED_MODE     T_FPU|T_JOINABLE
+#define OP_LED_TASK_STKSZ 4096
+#define OP_LED_TASK_NAME  "Operationa LED rt Task"
+
+#define nb_Of_Threads 6
 /**********************/
 /* Type Declaration   */
 /**********************/
@@ -57,11 +108,13 @@ typedef unsigned char boolean_t;
 #define FALSE ( 1 == 0 )
 
 #define print_error(x,s)  printf("ERROR writing message to socket {%s}\n",s); exit(x);
-#define log_print(x) {  time_t t = time(NULL); \
-      struct tm tm = *localtime(&t); \
+//#define log_print(x) {  printf("%s\n",x); }
+#define log_print(x) {  /*time_t t = time(NULL);*/ \
+/*      struct tm tm = *localtime(&t); */\
       log_file_desc = fopen("/root/log/log.txt", "a+"); \
       if(log_file_desc != NULL) {\
-      fprintf(log_file_desc,"[%d/%d/%d %d:%d:%d] %s",tm.tm_mday, tm.tm_mon+1, tm.tm_year +1900, tm.tm_hour, tm.tm_min, tm.tm_sec, x); \
+      /*fprintf(log_file_desc,"[%d/%d/%d %d:%d:%d] %s",tm.tm_mday, tm.tm_mon+1, tm.tm_year +1900, tm.tm_hour, tm.tm_min, tm.tm_sec, x); */\
+      fprintf(log_file_desc,"%s", x); \
       fclose(log_file_desc);} \
       }
 
@@ -77,7 +130,6 @@ typedef unsigned char boolean_t;
 typedef struct {
   boolean_t       value ;
   boolean_t       validity ;
-  pthread_mutex_t mutex ;
 } input_object_t ;
 
 typedef enum {
@@ -108,7 +160,6 @@ typedef enum {
 typedef struct {
   boolean_t       value ;
   boolean_t       validity ;
-  pthread_mutex_t mutex ;
 } output_object_t ;
 
 typedef enum {
@@ -120,6 +171,7 @@ typedef enum {
   output_RLY_6,
   output_RLY_7,
   output_RLY_8,
+  led_backlight,
   nb_Of_Output_Elements
 } output_element_t ;
 
@@ -188,7 +240,6 @@ typedef struct {
   messages_elements_t   id_message ;
   boolean_t             printed_to_lcd ;
   boolean_t             sent_to_server ;
-  pthread_mutex_t       mutex ;
 } active_message_t ;
 
 typedef enum {
@@ -210,11 +261,6 @@ typedef  union {
 /* Public Data        */
 /**********************/
 // threads
-extern pthread_t write_thread ;
-extern pthread_t read_thread ;
-extern pthread_t monitor_thread ;
-extern pthread_t update_thread ;
-
 // Arrays of I/O pins
 extern unsigned int  lcd_pins [] ;
 extern unsigned int  pins_in  [nb_Of_Input_Elements]  ;
@@ -254,17 +300,20 @@ extern int  lcd_handler ;
 // initial context object
 extern config_object_t config_Array_Of_Elements[nb_Of_Config_Elements];
 extern context_object_t *context_pile;
-extern context_object_t context_1, context_2, context_3, context_4 ;
+extern context_object_t context_1, context_2, context_3, context_4, context_5 ;
 
 /**********************/
 /* Public Functions   */
 /**********************/
 
-extern int   ihome_initialize ( void ) ;
-extern void *ihome_monitor    ( void *prm) ;
-extern void *ihome_read       ( void *prm) ;
-extern void *ihome_update     ( void *prm) ;
-extern void *ihome_write      ( void *prm) ;
+extern int  ihome_initialize ( void ) ;
+extern void ihome_monitor    ( void *prm) ;
+extern void ihome_read       ( void *prm) ;
+extern void ihome_update     ( void *prm) ;
+extern void ihome_write      ( void *prm) ;
+extern void ihome_write_messages     ( void *prm) ;
+extern void ihome_op_led     ( void *prm) ;
+
 
 
 /* Socket data */
@@ -284,5 +333,6 @@ extern FILE *log_file_desc;
 extern void ihome_signal_term();
 extern void ihome_signal_hup();
 extern void ihome_signal_int();
+extern void ihome_signal_segmentation_fault();
 
 #endif

@@ -36,73 +36,39 @@
  *   - change usage of wiringPi by bcm2835 lib
  */
 #include "ihome_public.h"
-#include <unistd.h>
-#include <sched.h>
-#include <pthread.h>
+#include <sys/mman.h>
 
-#define nb_Of_Threads 4
-
-pthread_t write_thread ;
-pthread_t read_thread ;
-pthread_t monitor_thread ;
-pthread_t update_thread ;
-
-pthread_attr_t write_attr ;
-pthread_attr_t read_attr ;
-pthread_attr_t monitor_attr ;
-pthread_attr_t update_attr ;
-
-struct sched_param write_param ;
-struct sched_param read_param ;
-struct sched_param monitor_param ;
-struct sched_param update_param ;
 
 int threads_rtn[nb_Of_Threads];
 int ihome_init_status ;
-
 int main( )
 {
   int l_indx ;
-  log_print("initialization\n") ;
   ihome_init_status = ihome_initialize () ;
+  log_print("initialization\n") ;
 
-  pthread_attr_init ( &write_attr ) ;
-  pthread_attr_init ( &read_attr ) ;
-  pthread_attr_init ( &monitor_attr ) ;
-  pthread_attr_init ( &update_attr ) ;
 
-  pthread_attr_setinheritsched ( &write_attr, PTHREAD_EXPLICIT_SCHED ) ;
-  pthread_attr_setinheritsched ( &read_attr, PTHREAD_EXPLICIT_SCHED ) ;
-  pthread_attr_setinheritsched ( &monitor_attr, PTHREAD_EXPLICIT_SCHED ) ;
-  pthread_attr_setinheritsched ( &update_attr, PTHREAD_EXPLICIT_SCHED ) ;
+  threads_rtn [0] = rt_task_create (&write_thread,    WRITE_TASK_NAME,   WRITE_TASK_STKSZ,    WRITE_TASK_PRIO, WRITE_MODE); //T_JOINABLE, ihome_write, NULL) ;
+  threads_rtn [1] = rt_task_create (&read_thread,     READ_TASK_NAME,    READ_TASK_STKSZ,     READ_TASK_PRIO,  READ_MODE); //T_JOINABLE, ihome_read, NULL) ;
+  threads_rtn [2] = rt_task_create (&monitor_thread,  MONITOR_TASK_NAME,   MONITOR_TASK_STKSZ,    MONITOR_TASK_PRIO, MONITOR_MODE); //T_JOINABLE, ihome_monitor, NULL) ;
+  threads_rtn [3] = rt_task_create (&update_thread,   UPDATE_TASK_NAME,   UPDATE_TASK_STKSZ,    UPDATE_TASK_PRIO, UPDATE_MODE); //T_JOINABLE, ihome_update, NULL) ;
+  threads_rtn [4] = rt_task_create (&write_messages_thread,   WRITE_MESSAGES_TASK_NAME,   WRITE_MESSAGES_TASK_STKSZ,    WRITE_MESSAGES_TASK_PRIO, WRITE_MESSAGES_MODE); //T_JOINABLE, ihome_write_messages, NULL) ;
+  threads_rtn [4] = rt_task_create (&op_led_thread,   OP_LED_TASK_NAME,   OP_LED_TASK_STKSZ,    OP_LED_TASK_PRIO, OP_LED_MODE);
 
-  pthread_attr_setschedpolicy  ( &write_attr, SCHED_RR ) ;
-  pthread_attr_setschedpolicy  ( &read_attr, SCHED_RR ) ;
-  pthread_attr_setschedpolicy  ( &monitor_attr, SCHED_RR ) ;
-  pthread_attr_setschedpolicy  ( &update_attr, SCHED_RR ) ;
-
-  write_param.sched_priority = 40;
-  read_param.sched_priority  = 60 ;
-  monitor_param.sched_priority = 70 ;
-  update_param.sched_priority = 50 ;
-
-  pthread_attr_setschedparam ( &write_attr, &write_param ) ;
-  pthread_attr_setschedparam ( &read_attr, &read_param ) ;
-  pthread_attr_setschedparam ( &monitor_attr, &monitor_param ) ;
-  pthread_attr_setschedparam ( &update_attr, &update_param ) ;
-
-  threads_rtn [0] = pthread_create (&write_thread,    &write_attr,   ihome_write,    NULL) ;
-  threads_rtn [1] = pthread_create (&read_thread,     &read_attr,    ihome_read,     NULL) ;
-  threads_rtn [2] = pthread_create (&monitor_thread,  &monitor_attr, ihome_monitor,  NULL) ;
-  threads_rtn [3] = pthread_create (&update_thread,   &update_attr,  ihome_update,   NULL) ;
-
-  if ( (threads_rtn [0] || threads_rtn [1] || threads_rtn [2] || threads_rtn [3] ) == 0 )
+  if ( (threads_rtn [0] || threads_rtn [1] || threads_rtn [2] || threads_rtn [3] || threads_rtn [4] || threads_rtn [5] ) == 0 )
   {
-    printf("Starting iHome threads...\n");
+    log_print("creation of rt tasks succes\n");
+
+    rt_task_start(&write_thread, ihome_write, NULL);
+    rt_task_start(&read_thread, ihome_read, NULL);
+    rt_task_start(&monitor_thread, ihome_monitor, NULL);
+    rt_task_start(&update_thread, ihome_update, NULL);
+    rt_task_start(&write_messages_thread, ihome_write_messages, NULL);
+    rt_task_start(&op_led_thread, ihome_op_led, NULL);
   }
   else
   {
-    printf("creation of threads fail\n");
+    log_print("creation of rt tasks fail\n");
     return -1;
   }
 
@@ -117,19 +83,14 @@ int main( )
       }
     }
   }
-  
-    pthread_join(write_thread,    NULL) ;
-    pthread_join(read_thread,     NULL) ;
-    pthread_join(monitor_thread,  NULL) ;
-    pthread_join(update_thread,   NULL) ;
-  
-  // do nothing while other tasks are running
-  //while (program_is_running == TRUE);
 
-  pthread_attr_destroy ( &write_attr ) ;
-  pthread_attr_destroy ( &read_attr ) ;
-  pthread_attr_destroy ( &monitor_attr ) ;
-  pthread_attr_destroy ( &update_attr ) ;
+
+  rt_task_join ( &write_thread ) ;
+  rt_task_join ( &read_thread ) ;
+  rt_task_join ( &monitor_thread ) ;
+  rt_task_join ( &update_thread ) ;
+  rt_task_join ( &write_messages_thread ) ;
+  rt_task_join ( &op_led_thread ) ;
 
   /* close the created sockets */
 //close(socket_monitor);

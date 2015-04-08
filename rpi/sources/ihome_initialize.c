@@ -52,6 +52,8 @@ int ihome_initialize ( void )
   if (signal(SIGTERM, ihome_signal_term) == SIG_ERR)
     log_print("Cannot handle SIGTERM!\n");
 
+  if (signal(SIGSEGV, ihome_signal_segmentation_fault) == SIG_ERR)
+    log_print("Cannot handle SIGSEGV!\n");
 // init bcm2835 hardware
   bcm2835_init();
 
@@ -91,6 +93,8 @@ int ihome_initialize ( void )
   config_Array_Of_Elements[0].interval_minutes = 0 ;
   config_Array_Of_Elements[0].time_of_set = 0 ;
   config_Array_Of_Elements[0].time_of_reset = 0 ;
+
+  context_4.next = &context_5 ;
 
   context_3.next = &context_4 ;
   context_2.next = &context_3 ;

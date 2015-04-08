@@ -13,10 +13,11 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include "ihome_public.h"
+#include <cJSON.h>
 
-void *ihome_read ( void *prm)
+void ihome_read ( void *prm)
 {
-
+  log_print("Read RT Task succes\n");
   /* socket data */
   struct hostent *server;
   struct sockaddr_in serv_addr;
@@ -25,16 +26,18 @@ void *ihome_read ( void *prm)
   /* sent and received messages */
   char response[1000], *e1, *e2, *e3;
 
+  rt_task_set_periodic(NULL, TM_NOW, 50000000); // 50ms
   while (1)
   {
     // update GPIO outputs
     for (l_indx = 0; l_indx < nb_Of_Input_Elements; l_indx++)
     {
-      pthread_mutex_lock( &inputs_Array_Of_Elements[l_indx].mutex ) ;
+      //pthread_mutex_lock( &inputs_Array_Of_Elements[l_indx].mutex ) ;
       inputs_Array_Of_Elements[l_indx].value = (bcm2835_gpio_lev(pins_in[l_indx]) == HIGH) ? TRUE : FALSE ;
-      pthread_mutex_unlock( &inputs_Array_Of_Elements[l_indx].mutex ) ;
+      //pthread_mutex_unlock( &inputs_Array_Of_Elements[l_indx].mutex ) ;
     }
     //log_print("read input from pins and fill inputs array\n");
+#if 0
 
     /* create the socket */
     socket_read = socket(AF_INET, SOCK_STREAM, 0);
@@ -46,7 +49,6 @@ void *ihome_read ( void *prm)
     memcpy(&serv_addr.sin_addr.s_addr, server->h_addr_list[0], server->h_length);
     memcpy(&serv_addr.sin_addr.s_addr, server->h_addr_list[0], server->h_length);
 //log_print("create socket for reading\n");
-
 //l_socket_failed = FALSE ;
     /* connect the socket */
     if (connect(socket_read, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
@@ -63,7 +65,7 @@ void *ihome_read ( void *prm)
     /* send the request */
     /*  total = strlen(http_get_request);
       sent = 0;
-    /*  do {*/
+      do {*/
 //      bytes = write(socket_read,http_get_request+sent,total-sent);
     send(socket_read, http_get_request, total, 0);
     //log_print("send message via socket_read\n");
@@ -148,6 +150,50 @@ void *ihome_read ( void *prm)
         }
       }
     }
-    nanosleep((struct timespec[]) {{0, 50000000}}, NULL);
+#endif
+
+
+    FILE *f = fopen("/root/inputs_states.json", "r"); // open file
+    if (!f)
+    {
+      //  printf("unable to open inputs file\n");
+    }
+    else
+    {
+      fseek(f, 0, SEEK_END); // move char pointer to the end of file - 0
+      long len = ftell(f); // get the number of char before the char pointer
+      fseek(f, 0, SEEK_SET); // move char pointer to the start of file + 0
+
+      char *data = (char*) malloc(len + 1); // allocate memory space for data
+      fread(data, 1, len, f);
+      fclose(f);
+
+      char *value;
+      cJSON *json, *inputs_array, *inputs_array_item, *inputs_array_item_value ;
+      json = cJSON_Parse(data);
+      free(data);
+
+      if (!json) {
+        log_print("Error json parsing read task: ["); log_print(cJSON_GetErrorPtr());
+      }
+      else
+      {
+        inputs_array = cJSON_GetObjectItem(json, "Inputs");
+        for (l_indx = 0 ; (l_indx < nb_Of_Command_Elements) && (l_indx < cJSON_GetArraySize(inputs_array)) ;  l_indx++)
+        {
+          inputs_array_item = cJSON_GetArrayItem(inputs_array, l_indx);
+          inputs_array_item_value = cJSON_GetObjectItem(inputs_array_item, "value");
+
+
+          commands_Array_Of_Elements[l_indx].value = (strcmp(inputs_array_item_value->valuestring, "ON") == 0 ) ?
+              TRUE : FALSE ;
+        }
+      }
+//    cJSON_Delete(inputs_array);
+      cJSON_Delete(json);
+    }
+
+    //nanosleep((struct timespec[]) {{0, 50000000}}, NULL);
+    rt_task_wait_period(NULL);
   }
 }
