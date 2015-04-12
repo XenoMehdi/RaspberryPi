@@ -40,6 +40,8 @@
 #include <stdio.h>
 #include <bcm2835.h>
 #include <unistd.h>
+#include <cJSON.h>
+
 
 #include <stdio.h> /* printf, sprintf */
 #include <stdlib.h> /* read, write, close */
@@ -107,6 +109,14 @@ typedef unsigned char boolean_t;
 #define TRUE ( 1 == 1 )
 #define FALSE ( 1 == 0 )
 
+#define HW 0
+#define SW 1
+
+#define MAX_SIZE_INPUT_PINS  50
+#define MAX_SIZE_INPUT_CMD   50
+#define MAX_SIZE_OUTPUT_PINS 50
+#define MAX_SIZE_INOUT_NAMES (MAX_SIZE_OUTPUT_PINS + MAX_SIZE_INPUT_PINS + MAX_SIZE_INPUT_CMD)
+
 #define print_error(x,s)  printf("ERROR writing message to socket {%s}\n",s); exit(x);
 //#define log_print(x) {  printf("%s\n",x); }
 #define log_print(x) {  /*time_t t = time(NULL);*/ \
@@ -126,64 +136,24 @@ typedef unsigned char boolean_t;
 #define ERR_OPEN_SOCKET     0x04
 #define LCD_INIT_FAIL       0x08
 
-// define the structure of input object
+// define the structure of pin with it's value
 typedef struct {
-  boolean_t       value ;
-  boolean_t       validity ;
-} input_object_t ;
+  unsigned int    pin ;
+  unsigned int    value ;  
+} digital_pin_t ;
 
-typedef enum {
-  input_1,
-  input_2,
-  input_3,
-  input_4,
-  input_5,
-  input_6,
-  input_7,
-  input_8,
-  nb_Of_Input_Elements
-} input_element_t ;
-
-typedef enum {
-  command_1,
-  command_2,
-  command_3,
-  command_4,
-  command_5,
-  command_6,
-  command_7,
-  command_8,
-  nb_Of_Command_Elements
-} command_element_t ;
-
-// define the structure of output object
+// define the structure of an object I/O
 typedef struct {
-  boolean_t       value ;
-  boolean_t       validity ;
-} output_object_t ;
+  unsigned int     id ;
+  digital_pin_t   *pin ; // if type is HW else  = NULL
+  unsigned char   *name ;
+  boolean_t        hw_sw ; //  either a physical = 0 I/O pin or input from gui = 1
+} object_t ;
 
-typedef enum {
-  output_RLY_1,
-  output_RLY_2,
-  output_RLY_3,
-  output_RLY_4,
-  output_RLY_5,
-  output_RLY_6,
-  output_RLY_7,
-  output_RLY_8,
-  led_backlight,
-  nb_Of_Output_Elements
-} output_element_t ;
-
-// define the structure of configuration object
-typedef enum {
-  NORMAL_RELAY,
-  PERIODIC_TRIGGERING
-} output_type_t ;
 
 // define the structure of configuration object
 typedef struct {
-  output_type_t type_of_output  ;
+  char          type_of_output  ;
   boolean_t     active_on_high  ;
   unsigned int  time_before_activation ;
   unsigned int  time_before_deactivation ;
@@ -195,8 +165,8 @@ typedef struct {
 
 // define the structure of contexte object
 typedef struct context_object_s {
-  input_object_t *input ;
-  output_object_t *output ;
+  object_t *input ;
+  object_t *output ;
   config_object_t *config ;
   struct context_object_s *prev ;
   struct context_object_s *next ;
@@ -262,9 +232,15 @@ typedef  union {
 /**********************/
 // threads
 // Arrays of I/O pins
-extern unsigned int  lcd_pins [] ;
-extern unsigned int  pins_in  [nb_Of_Input_Elements]  ;
-extern unsigned int  pins_out [nb_Of_Output_Elements] ;
+extern unsigned int lcd_pins [] ;
+extern digital_pin_t pins_in [MAX_SIZE_INPUT_PINS]  ;
+extern digital_pin_t pins_out [MAX_SIZE_OUTPUT_PINS] ;
+extern digital_pin_t cmd_in [MAX_SIZE_INPUT_CMD] ;
+extern unsigned char *inout_names [MAX_SIZE_INOUT_NAMES] ;
+
+extern unsigned int nb_Of_Input_Elements ;
+extern unsigned int nb_Of_Command_Elements ;
+extern unsigned int nb_Of_Output_Elements ;
 
 // lcd handler
 extern int lcd_handler;
@@ -273,13 +249,12 @@ extern int lcd_handler;
 extern boolean_t program_is_running ;
 
 // Array of input elements.
-extern input_object_t inputs_Array_Of_Elements [ nb_Of_Input_Elements ];
-extern input_object_t commands_Array_Of_Elements [ nb_Of_Command_Elements ];
-extern const input_object_t input_object_cst;
+extern object_t inputs_Array_Of_Elements [ MAX_SIZE_INPUT_PINS + MAX_SIZE_INPUT_CMD ];
+extern const object_t input_object_cst;
 
 // Array of output elements.
-extern output_object_t outputs_Array_Of_Elements [ nb_Of_Output_Elements ];
-extern const output_object_t output_object_cst;
+extern object_t outputs_Array_Of_Elements [ MAX_SIZE_OUTPUT_PINS ];
+extern const object_t output_object_cst;
 
 // List of defined messages
 extern const messages_object_t messages_list_cst [ nb_Of_Messages ] ;
@@ -313,7 +288,7 @@ extern void ihome_update     ( void *prm) ;
 extern void ihome_write      ( void *prm) ;
 extern void ihome_write_messages     ( void *prm) ;
 extern void ihome_op_led     ( void *prm) ;
-
+extern void ihome_get_config_from_file( void );
 
 
 /* Socket data */

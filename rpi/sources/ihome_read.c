@@ -13,7 +13,6 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include "ihome_public.h"
-#include <cJSON.h>
 
 void ihome_read ( void *prm)
 {
@@ -33,7 +32,7 @@ void ihome_read ( void *prm)
     for (l_indx = 0; l_indx < nb_Of_Input_Elements; l_indx++)
     {
       //pthread_mutex_lock( &inputs_Array_Of_Elements[l_indx].mutex ) ;
-      inputs_Array_Of_Elements[l_indx].value = (bcm2835_gpio_lev(pins_in[l_indx]) == HIGH) ? TRUE : FALSE ;
+      pins_in[l_indx].value = (bcm2835_gpio_lev(pins_in[l_indx].pin) == HIGH) ? TRUE : FALSE ;
       //pthread_mutex_unlock( &inputs_Array_Of_Elements[l_indx].mutex ) ;
     }
     //log_print("read input from pins and fill inputs array\n");
@@ -178,15 +177,26 @@ void ihome_read ( void *prm)
       }
       else
       {
-        inputs_array = cJSON_GetObjectItem(json, "Inputs");
-        for (l_indx = 0 ; (l_indx < nb_Of_Command_Elements) && (l_indx < cJSON_GetArraySize(inputs_array)) ;  l_indx++)
+        if ( nb_Of_Command_Elements != cJSON_GetArraySize(inputs_array) )
         {
-          inputs_array_item = cJSON_GetArrayItem(inputs_array, l_indx);
-          inputs_array_item_value = cJSON_GetObjectItem(inputs_array_item, "value");
+          log_print("number of command input in config file is different to the one in inputs.json file");
+          ihome_signal_term();
+        }
+        else
+        {
+          inputs_array = cJSON_GetObjectItem(json, "Inputs");
+          for (l_indx = 0 ; (l_indx < nb_Of_Command_Elements) ;  l_indx++)
+          {
+            inputs_array_item = cJSON_GetArrayItem(inputs_array, l_indx);
+            inputs_array_item_value = cJSON_GetObjectItem(inputs_array_item, "value");
 
+            for (int l_indx_j = 0; l_indx_j < nb_Of_Command_Elements; l_indx_j++)
+            {
+              if (cJSON_GetObjectItem(inputs_array_item, "pin")->valueint == cmd_in[l_indx_j].pin)
+                cmd_in[l_indx_j].value = (strcmp(inputs_array_item_value->valuestring, "ON") == 0 ) ? TRUE : FALSE ;
+            }
 
-          commands_Array_Of_Elements[l_indx].value = (strcmp(inputs_array_item_value->valuestring, "ON") == 0 ) ?
-              TRUE : FALSE ;
+          }
         }
       }
 //    cJSON_Delete(inputs_array);

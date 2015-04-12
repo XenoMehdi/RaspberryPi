@@ -39,7 +39,6 @@
 #include <sys/time.h>
 #include "ihome_public.h"
 //#include "ihome_lcd.h"
-#include <cJSON.h>
 
 
 void ihome_write ( void *prm)
@@ -61,7 +60,7 @@ void ihome_write ( void *prm)
     {
       if(l_indx == 7) continue;
       
-      bcm2835_gpio_write(pins_out[l_indx], ((outputs_Array_Of_Elements[l_indx].value == TRUE ) ? HIGH : LOW ));
+      bcm2835_gpio_write(pins_out[l_indx].pin, ((pins_out[l_indx].value == TRUE ) ? HIGH : LOW ));
       //sprintf(tmp, "output %d", l_indx + 1);
       
       field = cJSON_CreateObject();
@@ -69,8 +68,8 @@ void ihome_write ( void *prm)
       cJSON_AddStringToObject(field, "name", "to get from a table of names");
 
       cJSON_AddStringToObject(field, "type",   "RELAY");
-      cJSON_AddStringToObject(field, "value", ((outputs_Array_Of_Elements[l_indx].value == TRUE ) ? "ON" : "OFF"));
-      cJSON_AddNumberToObject(field, "pin number", pins_out[l_indx]);
+      cJSON_AddStringToObject(field, "value", ((pins_out[l_indx].value == TRUE ) ? "ON" : "OFF"));
+      cJSON_AddNumberToObject(field, "pin number", pins_out[l_indx].pin);
       
     }
 

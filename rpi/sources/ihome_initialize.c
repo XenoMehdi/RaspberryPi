@@ -54,30 +54,34 @@ int ihome_initialize ( void )
 
   if (signal(SIGSEGV, ihome_signal_segmentation_fault) == SIG_ERR)
     log_print("Cannot handle SIGSEGV!\n");
+
+  // get configurations from config.json file, and write informations to dedicated arrays
+  ihome_get_config_from_file();
+
 // init bcm2835 hardware
   bcm2835_init();
 
 // initialize the GPIO for input and output modes
   for (l_indx = 0; l_indx < nb_Of_Input_Elements; l_indx++)
   {
-    bcm2835_gpio_fsel(pins_in[l_indx], BCM2835_GPIO_FSEL_INPT);
-    bcm2835_gpio_set_pud(pins_in[l_indx], BCM2835_GPIO_PUD_DOWN);
+    bcm2835_gpio_fsel(pins_in[l_indx].pin, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_gpio_set_pud(pins_in[l_indx].pin, BCM2835_GPIO_PUD_DOWN);
   }
 
   for (l_indx = 0; l_indx < nb_Of_Output_Elements; l_indx++)
   {
-    bcm2835_gpio_fsel(pins_out[l_indx], BCM2835_GPIO_FSEL_OUTP);
-    bcm2835_gpio_set_pud(pins_out[l_indx], BCM2835_GPIO_PUD_DOWN);
+    bcm2835_gpio_fsel(pins_out[l_indx].pin, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_set_pud(pins_out[l_indx].pin, BCM2835_GPIO_PUD_DOWN);
   }
 // initialize the input array
   for ( l_indx = 0 ; l_indx < nb_Of_Input_Elements ; l_indx++ )
   {
     inputs_Array_Of_Elements [l_indx] = input_object_cst ;
   }
-  for ( l_indx = 0 ; l_indx < nb_Of_Command_Elements ; l_indx++ )
+  /*for ( l_indx = 0 ; l_indx < nb_Of_Command_Elements ; l_indx++ )
   {
     commands_Array_Of_Elements [l_indx] = input_object_cst ;
-  }
+  }*/
 // initialize the output array
   for ( l_indx = 0 ; l_indx < nb_Of_Output_Elements ; l_indx++ )
   {
@@ -85,7 +89,6 @@ int ihome_initialize ( void )
   }
 
 // initialize config array
-  config_Array_Of_Elements[0].type_of_output = NORMAL_RELAY ;
   config_Array_Of_Elements[0].active_on_high = TRUE ;
   config_Array_Of_Elements[0].time_before_activation = 0 ;
   config_Array_Of_Elements[0].time_before_deactivation = 0 ;

@@ -51,7 +51,7 @@ void ihome_update ( void *prm)
   {
 
     context_object_t *l_ptr ;
-
+/*
     for ( l_ptr = context_pile ; l_ptr != NULL ; l_ptr = l_ptr->next )
     {
       if ( l_ptr->config->type_of_output == NORMAL_RELAY )
@@ -59,7 +59,7 @@ void ihome_update ( void *prm)
         l_ptr->output->value = (l_ptr->config->active_on_high == TRUE) ?
                                l_ptr->input->value : !l_ptr->input->value ;
       }
-    }
+    }*/
     for (l_indx = 0; l_indx < nb_OF_ACTIVE_MESSAGES ; l_indx++ )
     {
       // For each element of active messages, if id is different of NO_ACTIVE_MESSAGE then print message
