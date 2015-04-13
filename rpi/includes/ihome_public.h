@@ -139,14 +139,14 @@ typedef unsigned char boolean_t;
 // define the structure of pin with it's value
 typedef struct {
   unsigned int    pin ;
-  unsigned int    value ;  
+  unsigned int    value ;
 } digital_pin_t ;
 
 // define the structure of an object I/O
 typedef struct {
   unsigned int     id ;
   digital_pin_t   *pin ; // if type is HW else  = NULL
-  unsigned char   *name ;
+  char   *name ;
   boolean_t        hw_sw ; //  either a physical = 0 I/O pin or input from gui = 1
 } object_t ;
 
@@ -236,7 +236,7 @@ extern unsigned int lcd_pins [] ;
 extern digital_pin_t pins_in [MAX_SIZE_INPUT_PINS]  ;
 extern digital_pin_t pins_out [MAX_SIZE_OUTPUT_PINS] ;
 extern digital_pin_t cmd_in [MAX_SIZE_INPUT_CMD] ;
-extern unsigned char *inout_names [MAX_SIZE_INOUT_NAMES] ;
+extern char inout_names [MAX_SIZE_INOUT_NAMES][50] ;
 
 extern unsigned int nb_Of_Input_Elements ;
 extern unsigned int nb_Of_Command_Elements ;
@@ -289,7 +289,8 @@ extern void ihome_write      ( void *prm) ;
 extern void ihome_write_messages     ( void *prm) ;
 extern void ihome_op_led     ( void *prm) ;
 extern void ihome_get_config_from_file( void );
-
+extern void ihome_write_outputs_to_file(void);
+extern void ihome_write_inputs_to_file(void);
 
 /* Socket data */
 extern int   port ;

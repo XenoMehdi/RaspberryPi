@@ -42,7 +42,13 @@ void ihome_signal_int()
 
 void ihome_signal_segmentation_fault()
 {
-	log_print("SIGSEGV : segmentation fault");
+	rt_task_delete ( &write_thread );
+	rt_task_delete ( &read_thread ) ;
+	rt_task_delete ( &monitor_thread ) ;
+	rt_task_delete ( &update_thread ) ;
+	rt_task_delete ( &write_messages_thread ) ;
+	rt_task_delete ( &op_led_thread ) ;
+	log_print("SIGSEGV : segmentation fault\n");
 	exit(-1);
 
 }

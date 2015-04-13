@@ -58,7 +58,11 @@ int ihome_initialize ( void )
   // get configurations from config.json file, and write informations to dedicated arrays
   ihome_get_config_from_file();
 
-// init bcm2835 hardware
+  char tmp_str[5];
+  log_print("number of inputs in config file : "); sprintf(tmp_str, "%d", nb_Of_Input_Elements); log_print(tmp_str); log_print("\n");
+  log_print("number of outputs in config file : "); sprintf(tmp_str, "%d", nb_Of_Output_Elements); log_print(tmp_str); log_print("\n");
+  log_print("number of commands in config file : "); sprintf(tmp_str, "%d", nb_Of_Command_Elements); log_print(tmp_str); log_print("\n");
+  // init bcm2835 hardware
   bcm2835_init();
 
 // initialize the GPIO for input and output modes
@@ -74,19 +78,19 @@ int ihome_initialize ( void )
     bcm2835_gpio_set_pud(pins_out[l_indx].pin, BCM2835_GPIO_PUD_DOWN);
   }
 // initialize the input array
-  for ( l_indx = 0 ; l_indx < nb_Of_Input_Elements ; l_indx++ )
+ /* for ( l_indx = 0 ; l_indx < nb_Of_Input_Elements ; l_indx++ )
   {
     inputs_Array_Of_Elements [l_indx] = input_object_cst ;
-  }
+  }*/
   /*for ( l_indx = 0 ; l_indx < nb_Of_Command_Elements ; l_indx++ )
   {
     commands_Array_Of_Elements [l_indx] = input_object_cst ;
   }*/
 // initialize the output array
-  for ( l_indx = 0 ; l_indx < nb_Of_Output_Elements ; l_indx++ )
+  /*for ( l_indx = 0 ; l_indx < nb_Of_Output_Elements ; l_indx++ )
   {
     outputs_Array_Of_Elements [l_indx] = output_object_cst ;
-  }
+  }*/
 
 // initialize config array
   config_Array_Of_Elements[0].active_on_high = TRUE ;

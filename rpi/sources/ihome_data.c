@@ -44,7 +44,7 @@ unsigned int  lcd_pins [6] = { 22, 27, 17, 4, 3, 2} ; // RS, E, D4,D5, D6, D7
 digital_pin_t  pins_in  [MAX_SIZE_INPUT_PINS] ;
 digital_pin_t  pins_out [MAX_SIZE_OUTPUT_PINS] ;
 digital_pin_t  cmd_in   [MAX_SIZE_INPUT_CMD] ;
-unsigned char *inout_names [MAX_SIZE_INOUT_NAMES] ;
+char inout_names [MAX_SIZE_INOUT_NAMES][50] ;
 
 unsigned int nb_Of_Input_Elements = 0;
 unsigned int nb_Of_Command_Elements = 0;
